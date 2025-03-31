@@ -1,0 +1,39 @@
+import os
+from flask import Flask
+from flask_smorest import Api
+from resources.characters import blp as CharactersBlueprint
+from resources.party import blp as PartyBlueprint
+from resources.enemies import blp as EnemiesBlueprint
+from resources.materia import blp as MateriaBlueprint
+from db import db
+
+
+def create_app(db_url=None):
+    app = Flask(__name__)
+
+    app.config["PROPOGATE_EXCEPTIONS"] = True
+    app.config["API_TITLE"] = "FF7 REST API"
+    app.config["API_VERSION"] = "1.0.0"
+    app.config["OPENAPI_VERSION"] = "3.0.3"
+    app.config["OPENAPI_URL_PREFIX"] = "/"
+    app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
+    app.config["OPENAPI_SWAGGER_UI_URL"] = (
+        "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
+    )
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv(
+        "DATABASE_URL", "sqlite:///data.db"
+    )
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.init_app(app)
+
+    api = Api(app)
+
+    with app.app_context():
+        db.create_all()
+
+    api.register_blueprint(CharactersBlueprint)
+    api.register_blueprint(PartyBlueprint)
+    api.register_blueprint(EnemiesBlueprint)
+    api.register_blueprint(MateriaBlueprint)
+
+    return app
