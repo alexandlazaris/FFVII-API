@@ -12,6 +12,11 @@ class PartyMemberSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
 
+class AssignMateriaSchema(Schema):
+    materia_id = fields.List(fields.Str(required=True))
+    member_id = fields.Str(dump_only=True)
+
+
 # --------------- Generic
 
 class DeleteSchema(Schema):

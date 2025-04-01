@@ -2,11 +2,14 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-from models.party import PartyModel
+from models import PartyModel, PartyMateriaModel, MateriaModel
 from schemas.schemas import (
     PartyMemberSchema,
     DeleteSchema,
+    AssignMateriaSchema
 )
+
+import json
 
 blp = Blueprint(
     "Party",
@@ -87,3 +90,23 @@ class Party(MethodView):
         PartyModel.query.delete()
         db.session.commit()
         return {"message": f"deleted {count} party member/s"}
+
+@blp.route("<string:member_id>/materia")
+class PartyMateria(MethodView):
+    @blp.arguments(AssignMateriaSchema)
+    @blp.response(201)
+    def post(self, request_data, member_id):
+        """
+        Assign multiple materia to 1 party member.
+        """
+        dumps_json = json.dumps(request_data)
+        loaded_json = json.loads(dumps_json)
+        for m in loaded_json["materia_id"]:
+            fetched = MateriaModel.query.get_or_404(m)
+            print (f">>> id {m} is mapped to {fetched.__getattribute__('name')}")
+            # add try/except
+            # form the data obj needed
+            # store in party_materia table
+        print (">>>> finished fetching materia data:")
+        return loaded_json 
+         
