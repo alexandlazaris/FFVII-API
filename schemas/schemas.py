@@ -14,8 +14,7 @@ class PartyMemberSchema(Schema):
 
 class AssignMateriaSchema(Schema):
     materia_id = fields.List(fields.Str(required=True))
-    member_id = fields.Str(dump_only=True)
-
+    member_id = fields.Str()
 
 # --------------- Generic
 
