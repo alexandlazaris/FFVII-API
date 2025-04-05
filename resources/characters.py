@@ -1,6 +1,6 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas.schemas import CharactersSchema, DeleteSchema
+from schemas import CharactersSchema
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models import CharactersModel
 from db import db
@@ -48,7 +48,7 @@ class Characters(MethodView):
         """
         return CharactersModel.query.all()
 
-    @blp.response(200, DeleteSchema)
+    @blp.response(200)
     def delete(self):
         """
         Delete all characters.
