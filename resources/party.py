@@ -3,7 +3,13 @@ from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models import PartyModel, PartyMateriaModel, MateriaModel
-from schemas.schemas import PartyMemberSchema, DeleteSchema, AssignMateriaSchema
+from schemas import (
+    PartyMemberSchema,
+    DeleteSchema,
+    AssignMateriaSchema,
+    GetMemberMateriaSchema,
+    GetSingleMemberMateriaSchema,
+)
 
 import json
 
@@ -34,21 +40,21 @@ class Party(MethodView):
 
         Add 1 of each character into your party, between 1-3 members.
         """
-        request_party = []
+        response = []
         for p in request:
             member = PartyModel(**p)
-            request_party.append(member)
-        new_party_length = request_party.__len__()
+            response.append(member)
+        new_party_length = response.__len__()
         if new_party_length < 1 or new_party_length > 3:
             abort(400, message="Party size invalid. Must between 1-3 members.")
         try:
-            db.session.add_all(request_party)
+            db.session.add_all(response)
             db.session.commit()
         except IntegrityError as e:
             abort(400, message=str(e.__cause__))
         except SQLAlchemyError():
             abort(500, message="Error occurred whilst inserting record.")
-        return request_party
+        return response
 
 
 @blp.route("<string:member_id>")
@@ -61,7 +67,7 @@ class Party(MethodView):
         member = PartyModel.query.get_or_404(member_id)
         return member
 
-    @blp.response(200, DeleteSchema)
+    @blp.response(200)
     def delete(self, member_id):
         """
         Delete a single party member by id.
@@ -77,7 +83,7 @@ class Party(MethodView):
 
 @blp.route("")
 class Party(MethodView):
-    @blp.response(200, DeleteSchema)
+    @blp.response(200)
     def delete(self):
         """
         Delete all party members.
@@ -90,44 +96,74 @@ class Party(MethodView):
 
 @blp.route("<string:member_id>/materia")
 class PartyMateria(MethodView):
+    @blp.response(200, GetSingleMemberMateriaSchema)
+    def get(self, member_id):
+        """
+        Get a single party member and their materia
+        """
+        member = PartyMateriaModel.query.get(member_id)
+        if member == None:
+            abort(404, message=f"'member' not found: {member_id}")
+        materia_list = []
+        materia = str(member.__getattribute__("materia_id")).split(",")
+        for m in materia:
+            materia_object = MateriaModel.query.get(m).__dict__
+            if materia_object == None:
+                abort(404, message=f"'materia_id' not found: {m}")
+            materia_list.append(materia_object)
+        response = {"member_id": member_id, "materia": materia_list}
+        return response
+
     @blp.arguments(AssignMateriaSchema)
-    @blp.response(201, AssignMateriaSchema)
+    @blp.response(201)
     def post(self, request_data, member_id):
         """
         Assign multiple materia to 1 party member.
+
+        The same cannot be assigned to multiple members.
         """
         dumps_json = json.dumps(request_data)
         loaded_json = json.loads(dumps_json)
-        print(loaded_json)
-        list_of_m = []
+        materia_list = []
+
+        # step 1: check if party member exists
+        member = PartyModel.query.get(member_id)
+        if member == None:
+            abort(404, message=f"'member_id' not found: {member_id}")
         for m in loaded_json["materia_id"]:
-            # step 1: check materia exists
+            # step 2: check if materia is already assigned to a member
+            all_materia_assigned_members = PartyMateriaModel.query.all()
+            for members in all_materia_assigned_members:
+                # iterate through all members with materia, checking if the incoming materia is already assigned
+                iter_m = str(members.__getattribute__("materia_id"))
+                iter_id = str(members.__getattribute__("member_id"))
+                if iter_m.__eq__(m):
+                    abort(
+                        500,
+                        messages=f"materia_id '{m}' is already assigned to member '{iter_id}'. Please use another materia.",
+                    )
+            # step 3: check if materia id exists in db
             try:
-                m_to_fetch = MateriaModel.query.get(m)
-                if m_to_fetch == None:
+                materia_object = MateriaModel.query.get(m)
+                if materia_object == None:
                     abort(404, message=f"'materia_id' not found: {m}")
-                print(f">>> id {m} is mapped to {m_to_fetch.__getattribute__('name')}")
-                list_of_m.append(m)
+                materia_list.append(m)
             except SQLAlchemyError as e:
                 abort(500, message=f"error checking materia")
-            # step 2: add both ids into party_materia table
+            # step 4: add both ids into party_materia table
         try:
-            list_of_string = str.join(", ", list_of_m)
-            add_obj = {"member_id": member_id, "member_materia": list_of_string}
+            list_of_string = str.join(", ", materia_list)
+            # TODO: add the full materia data here, not just the string ids.
+            add_obj = {"member_id": member_id, "materia_id": list_of_string}
             new_member_materia = PartyMateriaModel(**add_obj)
             db.session.add(new_member_materia)
             db.session.commit()
             return add_obj
         except SQLAlchemyError as e:
-            error_msgs = []
-            error_msgs.append(e.args)
-            error_msgs.append(e._message)
-            error_msgs.append(e._sql_message)
-            error_msgs.append(e.__cause__)
-            abort(500, message=f"Error occurred whilst inserting record: {error_msgs}")
-        print(list_of_m)
-        print(">>>> finished fetching materia data:")
-        # return add_obj
+            abort(
+                500,
+                message=f"cannot create another record for member {member_id}. Use PUT instead.",
+            )
 
 
 @blp.route("/materia")
@@ -141,9 +177,29 @@ class PartyMateria(MethodView):
         db.session.commit()
         return {"message": f"deleted all assigned materia"}
 
-
-# TODO:
-# continue testing error states
-# how to find out member id + materia ids attempted in response body
-# create GET /party/materia endpoint
-# create GET /party/id/materia endpoint
+    @blp.response(200, GetMemberMateriaSchema(many=True))
+    def get(self):
+        """
+        Get all party assigned materia
+        """
+        all_members_with_materia = PartyMateriaModel.query.all()
+        response = []
+        # for each member who has materia assigned
+        for a in all_members_with_materia:
+            # step 1: construct member data
+            attr_member_id = a.__getattribute__("member_id")
+            db_member = PartyModel.query.get(attr_member_id)
+            attr_member_name = db_member.__getattribute__("name")
+            response_member = {"id": attr_member_id, "name": attr_member_name}
+            # step 2: construct materia data
+            materia_list = []
+            attr_materia_id = str(a.__getattribute__("materia_id")).split(",")
+            for materia_index in attr_materia_id:
+                materia_object = MateriaModel.query.get(materia_index).__dict__
+                if materia_object == None:
+                    abort(404, message=f"'materia_id' not found: {materia_index}")
+                materia_list.append(materia_object)
+            # step 3: construct response body
+            combined_response = {"member": response_member, "materia": materia_list}
+            response.append(combined_response)
+        return response
