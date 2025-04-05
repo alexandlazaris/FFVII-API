@@ -7,9 +7,11 @@
 
 - add unit tests for all endpoints
 - add integration tests for all endpoints
-- add one-to-many relation for PartyMember<>Materia
-- add POST /materia endpoint for creating individual materia 
+- add one-to-many relation for PartyMember<>Materia (dirty but functional logic used for now)
+- create a PUT /party/{id}/materia to modify materia
+- separate logic for materia/party validation into separate classes, make it resuable
 - add github actions with semantic commit + releases
+- consistent transforming and handling of JSON responses (e.g use jsonify? self create dicts?)
 
 ## running
 1. `python3 -m venv .venv`
@@ -55,3 +57,16 @@ except IntegrityError as e:
             # e._sql_message() > SQL query error message
             # e.__cause > print SQL cause
 ``` 
+
+
+## Planning
+
+- each party member can have many materia assigned to them
+- each individual materia can only be assigned to 1 party member
+- assigning materia is optional
+- create endpoints to: PUT assign materia to a member, DELETE remove all materia from a member
+- POST /party/{member_id}/materia, body: [{"name": "bolt"}, {"name": "shiva"}] - response materia added to member 
+- POST /party/{member_id}/materia, body: [1,3,4,5] - response materia added to member 
+- party table: new column 'materia_id', with this row containing the individual materia id assigned to a player. This can be a comma separated string
+- materia table: new column 'member_id', with this row containing the associated party member id the materia belongs to. This can be a string
+- relationship: 1 to many
