@@ -3,7 +3,7 @@ from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.materia import MateriaModel
-from schemas.schemas import MateriaSchema
+from schemas import MateriaSchema
 import json
 
 blp = Blueprint(
@@ -46,19 +46,18 @@ class Materia(MethodView):
         """
         Add materia.
         """
-        request_materia = []
+        response = []
         for m in request:
             materia = MateriaModel(**m)
-            request_materia.append(materia)
-        new_materia_length = request_materia.__len__()
+            response.append(materia)
         try:
-            db.session.add_all(request_materia)
+            db.session.add_all(response)
             db.session.commit()
         except IntegrityError as e:
             abort(400, message=str(e.__cause__))
         except SQLAlchemyError():
             abort(500, message="Error occurred whilst inserting record.")
-        return request_materia
+        return response
 
 
     @blp.response(200, MateriaSchema(many=True))
