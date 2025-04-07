@@ -5,7 +5,6 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models import PartyModel, PartyMateriaModel, MateriaModel
 from schemas import (
     PartyMemberSchema,
-    DeleteSchema,
     AssignMateriaSchema,
     GetMemberMateriaSchema,
     GetSingleMemberMateriaSchema,
@@ -168,7 +167,7 @@ class PartyMateria(MethodView):
 
 @blp.route("/materia")
 class PartyMateria(MethodView):
-    @blp.response(200, DeleteSchema)
+    @blp.response(200)
     def delete(self):
         """
         Delete all assigned materia.
