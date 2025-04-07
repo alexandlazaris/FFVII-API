@@ -87,9 +87,17 @@ class Party(MethodView):
         """
         Delete all party members.
         """
+
+        # TODO: this is a forced delete for both party + party assigned materia
+        # this will be replaced onto db models have implemented one-to-many relationships
         count = PartyModel.query.count()
         PartyModel.query.delete()
         db.session.commit()
+
+        # don
+        PartyMateriaModel.query.delete()
+        db.session.commit()
+
         return {"message": f"deleted {count} party member/s"}
 
 
