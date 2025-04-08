@@ -5,6 +5,6 @@ class PartyModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False) 
-    # materia = db.relationship("MateriaModel", back_populates="party", lazy="dynamic")
+    level = db.Column(db.Integer, nullable=False, default=1)
     
      
