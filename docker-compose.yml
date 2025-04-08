@@ -1,4 +1,3 @@
-version: '3'
 services:
   web:
     build: .
@@ -6,3 +5,4 @@ services:
       - "60:5000"
     volumes:
       - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
