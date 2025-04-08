@@ -6,6 +6,7 @@ from resources.party import blp as PartyBlueprint
 from resources.enemies import blp as EnemiesBlueprint
 from resources.materia import blp as MateriaBlueprint
 from db import db
+from flask_migrate import Migrate
 
 
 def create_app(db_url=None):
@@ -25,15 +26,12 @@ def create_app(db_url=None):
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
-
+    migrate = Migrate(app, db) 
     api = Api(app)
-
-    with app.app_context():
-        db.create_all()
 
     api.register_blueprint(CharactersBlueprint)
     api.register_blueprint(PartyBlueprint)
     api.register_blueprint(EnemiesBlueprint)
     api.register_blueprint(MateriaBlueprint)
 
-    return app
+    return app 
