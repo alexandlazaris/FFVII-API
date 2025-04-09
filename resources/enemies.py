@@ -58,7 +58,7 @@ class Enemies(MethodView):
         return {"message": f"deleted {count} enemies"}
 
 
-@blp.route("/<string:enemy_id>")
+@blp.route("/<int:enemy_id>")
 class Enemies(MethodView):
     @blp.response(200, EnemySchema)
     def get(self, enemy_id):
