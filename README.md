@@ -14,26 +14,14 @@
 - consistent transforming and handling of JSON responses (e.g use jsonify? self create dicts?)
 - add a save state mechanic, with all the generated Party data belonging to a save file (each party member will have an associated save_file_id column)
 
-## Methods to develop
-
-1. local directory
-2. docker container (on local machine)
-
-### Local directory
-
-1. `python3 -m venv .venv`
-2. `source .venv/bin/activate`
-3. `pip install -r requirements`
-4. `sh migrations-run-local.sh`
-5. `gunicorn --bind 0.0.0.0:80 "app:create_app()"`
-
-## Docker container
+## Building to a docker container
 
 1. run `sh docker-local-container.sh` to build and run a container (port 80)
+2. target `0.0.0.0:80` for any local tests and debugging
 
 ## API docs
 
-open `localhost:{port}/swagger-ui` for api docs
+open `{url}:{port}/swagger-ui` for api docs
 
 ## DB migrations
 
