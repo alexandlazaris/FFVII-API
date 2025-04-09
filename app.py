@@ -7,11 +7,12 @@ from resources.enemies import blp as EnemiesBlueprint
 from resources.materia import blp as MateriaBlueprint
 from db import db
 from flask_migrate import Migrate
+from dotenv import load_dotenv
 
 
 def create_app(db_url=None):
     app = Flask(__name__)
-
+    load_dotenv()
     app.config["PROPOGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "FF7 REST API"
     app.config["API_VERSION"] = "1.0.0"
@@ -22,11 +23,11 @@ def create_app(db_url=None):
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     )
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv(
-        "DATABASE_URL", "sqlite:///data.db"
+        "PROD_DB_URL", "sqlite:///data.db"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
-    migrate = Migrate(app, db) 
+    migrate = Migrate(app, db)
     api = Api(app)
 
     api.register_blueprint(CharactersBlueprint)
@@ -34,4 +35,4 @@ def create_app(db_url=None):
     api.register_blueprint(EnemiesBlueprint)
     api.register_blueprint(MateriaBlueprint)
 
-    return app 
+    return app
