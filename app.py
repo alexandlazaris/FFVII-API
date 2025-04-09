@@ -12,7 +12,8 @@ from dotenv import load_dotenv
 
 def create_app(db_url=None):
     app = Flask(__name__)
-    load_dotenv()
+        
+    load_dotenv()    
     app.config["PROPOGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "FF7 REST API"
     app.config["API_VERSION"] = "1.0.0"
@@ -23,7 +24,7 @@ def create_app(db_url=None):
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     )
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv(
-        "PROD_DB_URL", "sqlite:///data.db"
+        "DATABASE_URL", "sqlite:///data.db"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
