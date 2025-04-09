@@ -1,3 +1,4 @@
 # .dockerignore
 instance
 */__pycache__
+.env
