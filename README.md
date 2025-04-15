@@ -5,8 +5,6 @@
 
 Ever wanted to play FF7 as a REST API?! Well now you can.
 
-> 
-
 ## TODO
 
 ### dev
@@ -17,7 +15,8 @@ Ever wanted to play FF7 as a REST API?! Well now you can.
 - separate logic for materia/party validation into separate classes, make it resuable
 - add github actions with semantic commit + releases
 - consistent transforming and handling of JSON responses (e.g use jsonify? self create dicts?)
-- get gunicorn to print endpoint (method + path + timestamp) to log output
+- install & setup https://logfire.pydantic.dev/docs/ for observability
+- install & setup https://docs.pydantic.dev/latest/ for type validation
 - increase materia effect length from 10 to 30
 
 ### game features
