@@ -56,7 +56,7 @@ class Party(MethodView):
         return response
 
 
-@blp.route("<string:member_id>")
+@blp.route("<int:member_id>")
 class Party(MethodView):
     @blp.response(200, PartyMemberSchema)
     def get(self, member_id):
@@ -101,7 +101,7 @@ class Party(MethodView):
         return {"message": f"deleted {count} party member/s"}
 
 
-@blp.route("<string:member_id>/materia")
+@blp.route("<int:member_id>/materia")
 class PartyMateria(MethodView):
     @blp.response(200, GetSingleMemberMateriaSchema)
     def get(self, member_id):
