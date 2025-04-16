@@ -3,7 +3,7 @@
 > [!IMPORTANT]  
 > This API is still in development. You have been warned.
 
-Ever wanted to play FF7 as a REST API?! Well now you can.
+Ever wanted to play FF7 as a REST API?! Well now you can!
 
 ## TODO
 
