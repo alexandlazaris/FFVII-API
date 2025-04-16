@@ -10,8 +10,8 @@ repo_dir = "/Users/alaz/Desktop/python-training-flask/flask-api"
 no_git_verify = false
 tag_format = "{version}"
 
-[semantic_release.branches.add-semantic-versioning]
-match = "(add-semantic-versioning)"
+[semantic_release.branches.main]
+match = "(main|master)"
 prerelease_token = "rc"
 prerelease = false
 
