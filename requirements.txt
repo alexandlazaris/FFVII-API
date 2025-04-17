@@ -19,3 +19,4 @@ flask-migrate
 gunicorn
 psycopg2-binary
 python-semantic-release
+pytest
