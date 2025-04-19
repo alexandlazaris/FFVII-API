@@ -26,6 +26,7 @@ Ever wanted to play FF7 as a REST API?! Well now you can!
 - add a save state mechanic, with all the generated Party data belonging to a save file (each party member will have an associated save_file_id column)
 - create a encounter endpoint, with POST (start battle), PUT (actions in battle), POST (finish battle with link to battle id), GET (get all battles), GET /{id} (get battle by id)
 - create a CRUD endpoint for game locations
+- initialise & record all game materia to a master materia table
 
 ## Building app within a docker container
 
@@ -39,11 +40,15 @@ Ever wanted to play FF7 as a REST API?! Well now you can!
 - container: `sh docker-local-container`
 - prod: `sh migrations-run-prod.sh`
 
+## tests
+
+- unit: `coverage run -m pytest && coverage html`
+
 ## tech stack
 
-- Python3
 - **Web framework**: Flask (https://flask.palletsprojects.com/en/stable/), gunicorn
 - **OpenAPI docs**: flask-smorest (https://flask-smorest.readthedocs.io/en/latest/openapi.html)
 - **ORM**: SQLAlchemy (https://www.sqlalchemy.org/) + Flask-SQLAlchemy (https://flask-sqlalchemy.readthedocs.io/en/stable/)
 - **DB**: sqlite for local, postgres for prod
 - **API client**: Bruno (https://www.usebruno.com/)
+- **unit tests**: pytest + https://coverage.readthedocs.io/en/7.8.0/

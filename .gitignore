@@ -6,3 +6,5 @@ data.db
 *.pyc
 .DS_Store
 .env
+.coverage
+htmlcov/

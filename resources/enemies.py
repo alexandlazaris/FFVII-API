@@ -15,7 +15,7 @@ blp = Blueprint(
 
 @blp.route("data")
 class Enemies(MethodView):
-    @blp.response(200, EnemySchema(many=True))
+    @blp.response(201, EnemySchema(many=True))
     def post(self):
         """
         Initialise enemy data into db.

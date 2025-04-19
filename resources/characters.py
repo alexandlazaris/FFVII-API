@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import CharactersSchema
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
 from models import CharactersModel
 from db import db
 import json
@@ -46,7 +46,10 @@ class Characters(MethodView):
         """
         Get all character data.
         """
-        return CharactersModel.query.all()
+        try:
+            return CharactersModel.query.all()
+        except OperationalError:
+            abort(500, message="Error fetching records.") 
 
     @blp.response(200)
     def delete(self):
