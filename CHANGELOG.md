@@ -1,6 +1,38 @@
 # CHANGELOG
 
 
+## v1.3.1 (2025-04-19)
+
+### Bug Fixes
+
+- Run migration to restore tables
+  ([`e599d88`](https://github.com/alexandlazaris/FFVII-API/commit/e599d88938ec9aa80dcb8c308d8d510af3f9d5a7))
+
+- Use correct status code
+  ([`9486c5b`](https://github.com/alexandlazaris/FFVII-API/commit/9486c5b36e78d81e2b3fde87aecf04cc3b24f443))
+
+### Chores
+
+- Ignore warnings & unit test outputs
+  ([`302fd9c`](https://github.com/alexandlazaris/FFVII-API/commit/302fd9c80a8493160ae09737b4054c14a232f931))
+
+- Replace outdated code from warning
+  ([`f465279`](https://github.com/alexandlazaris/FFVII-API/commit/f4652799a0f0fa772fe46b93a76b55b5922c731b))
+
+### Documentation
+
+- Add todo item + unit test guide
+  ([`77e1762`](https://github.com/alexandlazaris/FFVII-API/commit/77e1762a1943ec8f41913b93d0f5c0c80d65c586))
+
+### Testing
+
+- Add unit test beginnings, catch exception when fetching characters fails
+  ([`18a0a88`](https://github.com/alexandlazaris/FFVII-API/commit/18a0a88963f5047376d3e80afc16b50115924d77))
+
+- More unit tests
+  ([`b6cdc31`](https://github.com/alexandlazaris/FFVII-API/commit/b6cdc31da0f3757fc05c8ea1259dc417eb1f77cc))
+
+
 ## v1.3.0 (2025-04-16)
 
 ### Continuous Integration
