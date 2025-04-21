@@ -1,44 +1,42 @@
 # FFVII-API
 
-> [!IMPORTANT]  
+Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST API?! 
+
+> [!WARNING]  
 > This API is still in development. You have been warned.
 
-Ever wanted to play FF7 as a REST API?! Well now you can!
+## current game features
 
-## TODO
+- choose your party of 3 from playable characters
+- manage all your party materia 
+- obtain enemy stats and modify as needed
 
-### dev
+## coming soon
 
-- add unit tests 
-- add integration tests for all endpoints (needs the below)
-- create a docker compose file to create an env for running integration tests
-- separate logic for materia/party validation into separate classes, make it resuable
-- consistent transforming and handling of JSON responses (e.g use jsonify? self create dicts?)
-- install & setup https://logfire.pydantic.dev/docs/ for observability
-- install & setup https://docs.pydantic.dev/latest/ for type validation
-- increase materia effect length from 10 to 30
+- save states to contain all game data
+- full in-game materia lists
+- full in-game enemy details
+- improved db relationships between Party members, Materia & Save States 
+- wild encounters to fight enemies and gain XP/AP/Gil
 
-### game features
+> [!NOTE]  
+> If you have any ideas or feedback, please create an **Issue** or start a **Discussion**. Cheers!
 
-- add one-to-many relation for PartyMember<>Materia (dirty but functional logic used for now)
-- create a PUT /party/{id}/materia to modify materia
-- create a CRUD endpoint for save states
-- add a save state mechanic, with all the generated Party data belonging to a save file (each party member will have an associated save_file_id column)
-- create a encounter endpoint, with POST (start battle), PUT (actions in battle), POST (finish battle with link to battle id), GET (get all battles), GET /{id} (get battle by id)
-- create a CRUD endpoint for game locations
-- initialise & record all game materia to a master materia table
-
-## Building app within a docker container
+## launch API in container
 
 1. run `sh docker-local-container.sh` to build and run a container (port 80)
 2. target `0.0.0.0:80` for any local tests and debugging
 3. open `{url}:{port}/swagger-ui` for api docs
 
-## DB migrations
+## launch API locally
 
-- local dev: `sh migrations-run-local.sh`
-- container: `sh docker-local-container`
-- prod: `sh migrations-run-prod.sh`
+> [!TIP]  
+> Use a virtual python env to isolate your workspace. 
+
+1. clone repo & start with `pip install -r requirements.txt`
+2. run `sh migrations-run-local.sh` to prep your db 
+3. start server using `gunicorn --bind 0.0.0.0:80 "app:create_app()"`
+4. jump to `localhost:80/swagger-ui` for api docs
 
 ## tests
 
@@ -46,9 +44,10 @@ Ever wanted to play FF7 as a REST API?! Well now you can!
 
 ## tech stack
 
+- Python 3.12.3
 - **Web framework**: Flask (https://flask.palletsprojects.com/en/stable/), gunicorn
 - **OpenAPI docs**: flask-smorest (https://flask-smorest.readthedocs.io/en/latest/openapi.html)
 - **ORM**: SQLAlchemy (https://www.sqlalchemy.org/) + Flask-SQLAlchemy (https://flask-sqlalchemy.readthedocs.io/en/stable/)
 - **DB**: sqlite for local, postgres for prod
 - **API client**: Bruno (https://www.usebruno.com/)
-- **unit tests**: pytest + https://coverage.readthedocs.io/en/7.8.0/
+- **unit tests**: pytest + (https://coverage.readthedocs.io/en/7.8.0/)
