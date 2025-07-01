@@ -5,6 +5,7 @@ from resources.characters import blp as CharactersBlueprint
 from resources.party import blp as PartyBlueprint
 from resources.enemies import blp as EnemiesBlueprint
 from resources.materia import blp as MateriaBlueprint
+from resources.saves import blp as SavesBlueprint
 from db import db
 from flask_migrate import Migrate
 from dotenv import load_dotenv
@@ -35,5 +36,6 @@ def create_app(db_url=None):
     api.register_blueprint(PartyBlueprint)
     api.register_blueprint(EnemiesBlueprint)
     api.register_blueprint(MateriaBlueprint)
+    api.register_blueprint(SavesBlueprint)
 
     return app
