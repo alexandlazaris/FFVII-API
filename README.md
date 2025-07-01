@@ -33,9 +33,11 @@ Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST 
 > [!TIP]  
 > Use a virtual python env to isolate your workspace. 
 
-1. clone repo & start with `pip install -r requirements.txt`
+1. `python3 -m venv .venv` (or rename `.venv` to whatever you like)
+2. `source .venv/bin/activate`
+3. `pip install -r requirements`
 2. run `sh migrations-run-local.sh` to prep your db 
-3. start server using `gunicorn --bind 0.0.0.0:80 "app:create_app()"`
+3. start server using `gunicorn --bind 0.0.0.0:7777 "app:create_app()"`
 4. jump to `localhost:80/swagger-ui` for api docs
 
 ## tests
