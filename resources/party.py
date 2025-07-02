@@ -2,12 +2,12 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-from models import PartyModel, PartyMateriaModel, MateriaModel
+from models import Party, PartyMateriaModel, MateriaModel, Save
 from schemas import (
     PartyMemberSchema,
     AssignMateriaSchema,
     GetMemberMateriaSchema,
-    GetSingleMemberMateriaSchema,
+    GetSingleMemberMateriaSchema, SinglePartyMemberSchema
 )
 
 import json
@@ -18,52 +18,62 @@ blp = Blueprint(
     url_prefix="/party",
     description="Endpoints for managing the party",
 )
+   
 
-
-@blp.route("")
-class Party(MethodView):
-    @blp.response(200, PartyMemberSchema(many=True))
-    def get(self):
+@blp.route("<string:id>")
+class PartyApi(MethodView):
+    @blp.arguments(SinglePartyMemberSchema(many=True))
+    @blp.response(201, SinglePartyMemberSchema(many=True))
+    def post(self, body, id):
         """
-        Gets all party members
+        Create a party for a save file.
 
-        Gets all party members and a count.
+        Add 1-3 members into your party.
         """
-        return PartyModel.query.all()
-
-    @blp.arguments(PartyMemberSchema(many=True))
-    @blp.response(201, PartyMemberSchema(many=True))
-    def post(self, request):
-        """
-        Create a party.
-
-        Add 1 of each character into your party, between 1-3 members.
-        """
-        response = []
-        for p in request:
-            member = PartyModel(**p)
-            response.append(member)
-        new_party_length = response.__len__()
+        new_party = []
+        print (id)
+        for p in body:
+            member = Party(name=p['name'], save_id=id)
+            new_party.append(member)
+        print(new_party.__len__())
+        new_party_length = new_party.__len__()
         if new_party_length < 1 or new_party_length > 3:
             abort(400, message="Party size invalid. Must between 1-3 members.")
+        # TODO: add a check to see if a party already exists for this save
+        # new_party.append(save_id)
+        print (new_party)
         try:
-            db.session.add_all(response)
+            db.session.add_all(new_party)
             db.session.commit()
         except IntegrityError as e:
             abort(400, message=str(e.__cause__))
         except SQLAlchemyError():
             abort(500, message="Error occurred whilst inserting record.")
-        return response
+        return new_party
+    
+    @blp.response(200, SinglePartyMemberSchema(many=True))
+    def get(self, id):
+        """
+        Get party for a save
+        """
+        try:
+            party = Party.query.filter_by(save_id=id)
+            if party.first() == None:
+                abort(404, message=f"Party with 'save_id' {id} cannot be found.")
+            return party.all()
+        except IntegrityError as e:
+            abort(500, message="Something went wrong.")
 
+    # TODO: add using PUT /party/id to update the party
 
-@blp.route("<int:member_id>")
-class Party(MethodView):
+@blp.route("<string:save_id>")
+class PartyApi(MethodView):
     @blp.response(200, PartyMemberSchema)
-    def get(self, member_id):
+    def get(self, save_id):
         """
         Get a single party member by id.
         """
-        member = PartyModel.query.get_or_404(member_id)
+        member = Party.query.get_or_404(save_id)
         return member
 
     @blp.response(200)
@@ -72,7 +82,7 @@ class Party(MethodView):
         Delete a single party member by id.
         """
         try:
-            party_member_to_delete = PartyModel.query.get_or_404(member_id)
+            party_member_to_delete = Party.query.get_or_404(member_id)
             db.session.delete(party_member_to_delete)
             db.session.commit()
         except SQLAlchemyError as e:
@@ -81,7 +91,7 @@ class Party(MethodView):
 
 
 @blp.route("")
-class Party(MethodView):
+class PartyApi(MethodView):
     @blp.response(200)
     def delete(self):
         """
@@ -90,8 +100,8 @@ class Party(MethodView):
 
         # TODO: this is a forced delete for both party + party assigned materia
         # this will be replaced onto db models have implemented one-to-many relationships
-        count = PartyModel.query.count()
-        PartyModel.query.delete()
+        count = Party.query.count()
+        Party.query.delete()
         db.session.commit()
 
         # don
@@ -134,7 +144,7 @@ class PartyMateria(MethodView):
         materia_list = []
 
         # step 1: check if party member exists
-        member = PartyModel.query.get(member_id)
+        member = Party.query.get(member_id)
         if member == None:
             abort(404, message=f"'member_id' not found: {member_id}")
         for m in loaded_json["materia_id"]:
@@ -195,7 +205,7 @@ class PartyMateria(MethodView):
         for a in all_members_with_materia:
             # step 1: construct member data
             attr_member_id = a.__getattribute__("member_id")
-            db_member = PartyModel.query.get(attr_member_id)
+            db_member = Party.query.get(attr_member_id)
             attr_member_name = db_member.__getattribute__("name")
             response_member = {"id": attr_member_id, "name": attr_member_name}
             # step 2: construct materia data

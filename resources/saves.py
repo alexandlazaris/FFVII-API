@@ -3,8 +3,10 @@ from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.saves import Save
+from models.party import Party
 from schemas import SavesSchema
 import json
+from flask import jsonify
 
 
 blp = Blueprint(
@@ -35,12 +37,34 @@ class SaveApi(MethodView):
             abort(500, message="Error occurred whilst inserting record.")
         return {"id": new_save.id, "location": new_save.location}
 
+    # @blp.response(200, SavesSchema(many=True))
     @blp.response(200, SavesSchema(many=True))
     def get(self):
         """
-        Get all save files.
+        Get all save files with associated party info
         """
-        return Save.query.all()
+        # results = db.session.query(Save, Party).outerjoin(Party, Save.id == Party.save_id).all()
+        saves = Save.query.all()
+        response = []
+        for s in saves:
+            location = s.location
+            members = []
+            party = Party.query.filter_by(save_id=s.id)
+            all = party.all()
+            if len(all) >0 :
+                print (f"save {s.id} has {len(all)} members")
+                for m in all:
+                    members.append(m.name)
+            if len(all) == 0:
+                print (f"save {s.id} has no party")
+            print (members)
+            save_info = {
+                "id": s.id,
+                "location": location,
+                "party": members
+            }
+            response.append(save_info)
+        return jsonify(response)
 
     @blp.response(200)
     def delete(self):
