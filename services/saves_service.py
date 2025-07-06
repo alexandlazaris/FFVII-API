@@ -17,7 +17,6 @@ def get_all_saves():
             party = Party.query.filter_by(save_id=s.id)
             all = party.all()
             if len(all) > 0:
-                # print(f"save {s.id} has {len(all)} members")
                 for m in all:
                     members.append(m.name)
             save_info = {"id": s.id, "location": location, "party": members}
