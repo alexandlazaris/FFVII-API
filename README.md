@@ -42,7 +42,16 @@ Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST 
 
 ## tests
 
-- unit: `coverage run -m pytest && coverage html`
+### unit
+
+From `./`:
+
+1. run `coverage run -m pytest`
+2. run `coverage html`
+3. open `htmlcov/index.html` to view report
+
+> [!TIP]  
+> To print logs within unit tests, append `-s` to the `coverage` command in step 1 above. Useful when debugging unit tests.
 
 ## tech stack
 
