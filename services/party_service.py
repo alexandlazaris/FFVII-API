@@ -16,6 +16,7 @@ def create_party(body, id):
     try:
         db.session.add_all(new_party)
         db.session.commit()
+    # TODO: double check if this validation is right, is line 8 needed?
     except IntegrityError as e:
         abort(
             400,
@@ -46,20 +47,13 @@ def update_party_using_save(body, id):
         party = Party.query.filter_by(save_id=id).all()
         for p in party:
             current_members.append(p.name)
-        print(f"current party members: {current_members}")
-        print(f"party members to clear: {len(current_members)}")
-
         for delete in party:
             db.session.delete(delete)
-
         db.session.commit()
-
         new_members = []
         for m in body:
             new_members.append(m["name"])
-        print(f"new party members: {new_members}")
         return create_party(body, id)
-
     except SQLAlchemyError as e:
         db.session.rollback()
         abort(500, messcreate_partyage=f"Error updating party: {e._sql_message}")
