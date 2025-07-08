@@ -23,7 +23,6 @@ def upgrade():
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('weapon', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
     )
     op.create_table('enemies',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -34,7 +33,6 @@ def upgrade():
     sa.Column('location', sa.String(), nullable=False),
     sa.Column('disc', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
     )
     op.create_table('materia',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -42,20 +40,16 @@ def upgrade():
     sa.Column('element', sa.String(length=10), nullable=True),
     sa.Column('level', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
     )
     op.create_table('party',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=80), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
     )
     op.create_table('party_materia',
     sa.Column('member_id', sa.Integer(), nullable=False),
     sa.Column('materia_id', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('member_id'),
-    sa.UniqueConstraint('materia_id'),
-    sa.UniqueConstraint('member_id')
     )
     # ### end Alembic commands ###
 
