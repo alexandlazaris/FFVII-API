@@ -1,6 +1,20 @@
 # CHANGELOG
 
 
+## v2.0.0 (2025-07-08)
+
+### Features
+
+- Dummy change to force a major version bump
+  ([`53021e3`](https://github.com/alexandlazaris/FFVII-API/commit/53021e319ebcdecbe7fc104453ed1edef5dcd406))
+
+BREAKING CHANGE: This is an intentional breaking change to force a major version.
+
+### Breaking Changes
+
+- This is an intentional breaking change to force a major version.
+
+
 ## v1.4.0 (2025-07-08)
 
 ### Chores
