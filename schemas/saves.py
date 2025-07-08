@@ -1,6 +1,10 @@
 from marshmallow import Schema, fields
 
-class SavesSchema(Schema):
-    id = fields.Str()
+class SaveRequestSchema(Schema):
     location = fields.Str(required=True)
-    party = fields.Int(dump_only=True)
+
+class SaveResponseSchema(Schema):
+    id = fields.Str(dump_only=True)
+    location = fields.Str(required=True)
+    party = fields.List(fields.Str(dump_only=True))
+    party_lead = fields.Dict()

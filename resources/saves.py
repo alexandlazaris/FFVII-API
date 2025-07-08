@@ -1,6 +1,6 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
-from schemas import SavesSchema
+from schemas import SaveRequestSchema, SaveResponseSchema
 from services.saves_service import get_all_saves, create_save, delete_all_saves, get_save_by_id, delete_save_by_id
 
 
@@ -14,18 +14,18 @@ blp = Blueprint(
 
 @blp.route("")
 class SaveApi(MethodView):
-    @blp.arguments(SavesSchema)
-    @blp.response(201, SavesSchema)
+    @blp.arguments(SaveRequestSchema)
+    @blp.response(201, SaveResponseSchema)
     def post(self, body):
         """
         Create a save file
         """
         return create_save(body)
 
-    @blp.response(200, SavesSchema(many=True))
+    @blp.response(200, SaveResponseSchema(many=True))
     def get(self):
         """ 
-        Get all save files with associated party info
+        Get all save files with party info
         """
         return get_all_saves()
 
@@ -38,7 +38,7 @@ class SaveApi(MethodView):
 
 @blp.route("<string:id>")
 class SaveApi(MethodView):
-    @blp.response(200, SavesSchema)
+    @blp.response(200, SaveResponseSchema)
     def get(self, id):
         """
         Get a save file by id
