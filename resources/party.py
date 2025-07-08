@@ -15,7 +15,6 @@ from services.party_service import (
     get_party_using_save,
     update_party_using_save,
 )
-from flask import request
 import json
 
 blp = Blueprint(
