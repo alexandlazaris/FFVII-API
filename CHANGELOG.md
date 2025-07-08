@@ -1,6 +1,70 @@
 # CHANGELOG
 
 
+## v1.4.0 (2025-07-08)
+
+### Chores
+
+- Removed unused print
+  ([`7c55e3b`](https://github.com/alexandlazaris/FFVII-API/commit/7c55e3bdd2956a961240a159f7a7a3159c880820))
+
+### Code Style
+
+- Removed print logs
+  ([`99a3f7e`](https://github.com/alexandlazaris/FFVII-API/commit/99a3f7e8c7294524c9151642eb74195f7f06bc2d))
+
+### Continuous Integration
+
+- Edit container ports
+  ([`43adcb1`](https://github.com/alexandlazaris/FFVII-API/commit/43adcb18ab164481b56ba44b20c8a8e66957b410))
+
+### Documentation
+
+- Added unit test tip
+  ([`84123cb`](https://github.com/alexandlazaris/FFVII-API/commit/84123cbde86f7fccec6ee868949d0046d37b0446))
+
+- Cleaned up readme of bloat, add local run guide & API feature highlights
+  ([`b5696bf`](https://github.com/alexandlazaris/FFVII-API/commit/b5696bfe3b7fefa93d32ae88bf3b76537b72b800))
+
+- Create LICENSE
+  ([`5870691`](https://github.com/alexandlazaris/FFVII-API/commit/5870691ad6bd1544a8dd48833e13c74fd69be753))
+
+- Update features list
+  ([`da6853c`](https://github.com/alexandlazaris/FFVII-API/commit/da6853cc12662dc76c9ba44621a3f4037e4c37ac))
+
+- Updated run steps
+  ([`bb18b3d`](https://github.com/alexandlazaris/FFVII-API/commit/bb18b3d89007a12c4a50192a157ff3b5c71a9416))
+
+### Features
+
+- Added service to handle party routes
+  ([`1fe1328`](https://github.com/alexandlazaris/FFVII-API/commit/1fe13287c898e8569c8a3d4e15e6c13b2f44e8f3))
+
+- Cleaned up save service, added rollbacks
+  ([`39839e7`](https://github.com/alexandlazaris/FFVII-API/commit/39839e77bbd419532f8ac34ac18a1e01a44c05bd))
+
+- Customise party objects when getting saves
+  ([`1d269e0`](https://github.com/alexandlazaris/FFVII-API/commit/1d269e05b00456aa69a6969c1bc642451c6dcf8f))
+
+- Get single party member schema
+  ([`738c010`](https://github.com/alexandlazaris/FFVII-API/commit/738c010ca43883d10c108f1c7907354b21f3b515))
+
+- Import new Saves route
+  ([`a64fdf8`](https://github.com/alexandlazaris/FFVII-API/commit/a64fdf8c3dcec1b24176daa32bad9999a046a95d))
+
+- Improve schema independence for party routes
+  ([`eed55aa`](https://github.com/alexandlazaris/FFVII-API/commit/eed55aa67f29f236a29bc438ed36bcac789d4949))
+
+- Improve schema independence for save routes
+  ([`9a37fc9`](https://github.com/alexandlazaris/FFVII-API/commit/9a37fc949575ae3637cf3d8e0bf4cb970073e5fb))
+
+- Refactor how to add parties & validations involved
+  ([`5aa26b5`](https://github.com/alexandlazaris/FFVII-API/commit/5aa26b5f0e75a6222edbb56c9e648f2a53a3d7b3))
+
+- Saves now return party members
+  ([`e5f1f49`](https://github.com/alexandlazaris/FFVII-API/commit/e5f1f49353f48ce70154b8fda31dd4bbddd6577f))
+
+
 ## v1.3.1 (2025-04-19)
 
 ### Bug Fixes
