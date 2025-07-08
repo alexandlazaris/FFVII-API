@@ -16,5 +16,9 @@ class GetMemberMateriaSchema(Schema):
 class GetSingleMemberMateriaSchema(Schema):
     materia = fields.Nested(MateriaSchema(many=True))
 
-class SinglePartyMemberSchema(Schema):
-    name = fields.Str(required=True) 
+class PartyMemberRequestSchema(Schema):
+    name = fields.Str(required=True)
+
+class PartyMemberResponseSchema(Schema):
+    name = fields.Str()
+    level = fields.Str()

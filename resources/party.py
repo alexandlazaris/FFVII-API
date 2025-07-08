@@ -7,12 +7,13 @@ from schemas import (
     AssignMateriaSchema,
     GetMemberMateriaSchema,
     GetSingleMemberMateriaSchema,
-    SinglePartyMemberSchema,
+    PartyMemberRequestSchema,
+    PartyMemberResponseSchema
 )
 from services.party_service import (
     create_party,
     get_party_using_save,
-    update_party_using_save, delete_party_using_save
+    update_party_using_save,
 )
 from flask import request
 import json
@@ -27,44 +28,36 @@ blp = Blueprint(
 
 @blp.route("<string:id>")
 class PartyApi(MethodView):
-    @blp.arguments(SinglePartyMemberSchema(many=True))
-    @blp.response(201, SinglePartyMemberSchema(many=True))
+    @blp.arguments(PartyMemberRequestSchema(many=True))
+    @blp.response(201, PartyMemberResponseSchema(many=True))
     def post(self, body, id):
         """
-        Create a party for a save file.
-
-        Add 1-3 members into your party.
+        Create a party for a save file, adding 1-3 members
         """
         return create_party(body, id)
 
-    @blp.response(200, SinglePartyMemberSchema(many=True))
+    @blp.response(200, PartyMemberResponseSchema(many=True))
     def get(self, id):
         """
         Get party for a save
         """
         return get_party_using_save(id)
 
-    @blp.response(200, SinglePartyMemberSchema(many=True))
-    def put(self, id):
+    @blp.arguments(PartyMemberRequestSchema(many=True))
+    @blp.response(200, PartyMemberResponseSchema(many=True))
+    def put(self, body, id):
         """
         Update a party for a save
         """
-        body = request.get_json()
         return update_party_using_save(body, id)
-    
-    @blp.response(200)
-    def delete(self, id):
-        """
-        Delete the party for a save
-        """
-        return delete_party_using_save(id)
+
 
 @blp.route("<int:member_id>/materia")
 class PartyMateria(MethodView):
     @blp.response(200, GetSingleMemberMateriaSchema)
     def get(self, member_id):
         """
-        DO NOT USE - WIP - 
+        DO NOT USE - WIP -
         Get a single party member and their materia
         """
         member = PartyMateriaModel.query.get(member_id)
@@ -84,7 +77,7 @@ class PartyMateria(MethodView):
     @blp.response(201)
     def post(self, request_data, member_id):
         """
-        DO NOT USE - WIP - 
+        DO NOT USE - WIP -
         Assign multiple materia to 1 party member.
 
         The same cannot be assigned to multiple members.
@@ -138,7 +131,7 @@ class PartyMateria(MethodView):
     @blp.response(200)
     def delete(self):
         """
-        DO NOT USE - WIP - 
+        DO NOT USE - WIP -
         Delete all assigned materia.
         """
         PartyMateriaModel.query.delete()
@@ -148,7 +141,7 @@ class PartyMateria(MethodView):
     @blp.response(200, GetMemberMateriaSchema(many=True))
     def get(self):
         """
-        DO NOT USE - WIP - 
+        DO NOT USE - WIP -
         Get all party assigned materia
         """
         all_members_with_materia = PartyMateriaModel.query.all()
