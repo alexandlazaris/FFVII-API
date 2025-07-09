@@ -7,6 +7,25 @@ Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST 
 
 ## current game features
 
+```
+GET /saves
+[
+  {
+    "id": "1400602a-516f-449c-84f6-b22c9a0d28e3",
+    "location": "mideel",
+    "party": [
+      "Cloud",
+      "Cid",
+      "Cait Sith"
+    ],
+    "party_lead": {
+      "level": 77,
+      "name": "Cloud"
+    }
+  }
+]
+```
+
 - create & manage your party of up to 3 characters
 - create & manage your save files, storing key info on your party & location
 - read tips and info on bosses
