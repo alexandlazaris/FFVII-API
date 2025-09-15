@@ -35,4 +35,4 @@ jobs:
       run: echo "Hello ${{ inputs.name }}"
 
     - name: Print env var
-      run: echo "env var value is ${{ secrets.TEST_VAR }}"
+      run: echo "env var value is ${{ vars.TEST_VAR }}"
