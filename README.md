@@ -1,5 +1,7 @@
 # FFVII-API
 
+[![migrations](https://github.com/alexandlazaris/FFVII-API/actions/workflows/manual-trigger.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/manual-trigger.yml)
+
 Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST API?! 
 
 > [!WARNING]  
