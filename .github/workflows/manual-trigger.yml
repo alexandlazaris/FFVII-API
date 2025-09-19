@@ -1,0 +1,53 @@
+name: Run migration
+
+on:
+  push: 
+    branches:
+      - workflow-migrate-trigger
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+
+jobs:
+  validate_inputs:
+    runs-on: ubuntu-latest
+
+    environment: dev
+    
+    steps:
+    - name: Print env var
+      run: echo "env var value is >${{ vars.VAR }}<"
+
+    - name: Get secret name
+      run: echo "env secret value is ${{ secrets.NAME }}"
+
+    - name: Validate environment
+      if: ${{ inputs.environment == 'dev' }}
+      run: echo "deploying to ${{inputs.environment}}"
+
+  python:
+    needs: validate_inputs
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Install python requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Print Flask routes
+        run: flask routes
+
+    
+  
