@@ -3,30 +3,28 @@ name: Run migration
 on:
   push: 
     branches:
-      - workflow-migrate-trigger
+      - main
+      - modify-deploy-workflow
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'
+        description: 'Run migration?'
         required: true
-        default: 'dev'
+        default: 'no'
 
 jobs:
   validate_inputs:
     runs-on: ubuntu-latest
 
-    environment: dev
+    environment: prod
     
     steps:
-    - name: Print env var
-      run: echo "env var value is >${{ vars.VAR }}<"
-
-    - name: Get secret name
-      run: echo "env secret value is ${{ secrets.NAME }}"
-
     - name: Validate environment
-      if: ${{ inputs.environment == 'dev' }}
-      run: echo "deploying to ${{inputs.environment}}"
+      run: |
+        if: ${{ inputs.environment == 'no' }};
+          echo "Quitting workflow"
+          exit 1
+        fi
 
   python:
     needs: validate_inputs
