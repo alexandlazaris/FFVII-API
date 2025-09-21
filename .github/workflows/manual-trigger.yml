@@ -19,12 +19,11 @@ jobs:
     environment: prod
     
     steps:
-    - name: Validate environment
-      run: |
-        if: ${{ inputs.environment == 'no' }};
+      - name: Validate environment
+        if: ${{ inputs.environment == 'no' }}
+        run: |
           echo "Quitting workflow"
           exit 1
-        fi
 
   python:
     needs: validate_inputs
