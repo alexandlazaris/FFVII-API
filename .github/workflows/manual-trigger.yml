@@ -7,7 +7,7 @@ on:
       - modify-deploy-workflow
   workflow_dispatch:
     inputs:
-      environment:
+      choice:
         description: 'Run migration?'
         required: true
         default: 'no'
@@ -19,8 +19,11 @@ jobs:
     environment: prod
     
     steps:
-      - name: Validate environment
-        if: ${{ inputs.environment == 'no' }}
+      - name: Print choice
+        run: echo "${{inputs.choice}}"
+      
+      - name: Validate choice
+        if: ${{ inputs.choice == 'no' }}
         run: |
           echo "Quitting workflow"
           exit 1
