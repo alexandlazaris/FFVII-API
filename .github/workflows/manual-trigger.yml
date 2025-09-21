@@ -20,10 +20,10 @@ jobs:
     
     steps:
       - name: Print choice
-        run: echo "${{inputs.choice}}"
+        run: echo "${{ github.event.inputs.choice }}"
       
       - name: Validate choice
-        if: ${{ inputs.choice == 'no' }}
+        if: ${{ github.event.inputs.choice }}
         run: |
           echo "Quitting workflow"
           exit 1
