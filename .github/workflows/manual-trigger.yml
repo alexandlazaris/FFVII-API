@@ -15,9 +15,7 @@ on:
 jobs:
   validate_inputs:
     runs-on: ubuntu-latest
-
     environment: prod
-    
     steps:
       - name: Print choice
         run: echo "${{ github.event.inputs.choice }}"
@@ -31,7 +29,9 @@ jobs:
   python:
     needs: validate_inputs
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -46,8 +46,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Print Flask routes
-        run: flask routes
-
-    
-  
+      - name: Run db migration
+        run: |
+          flask db migrate
+          flask db upgrade
