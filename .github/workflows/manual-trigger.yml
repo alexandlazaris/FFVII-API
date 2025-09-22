@@ -48,5 +48,6 @@ jobs:
 
       - name: Run db migration
         run: |
-          flask db migrate
+          flask db current
+          flask db heads
           flask db upgrade
