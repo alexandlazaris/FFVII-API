@@ -24,6 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run local db migration
+        run: |
+          bash migrations-run-local.sh
+          
       - name: Run tests with Coverage
         run: |
           coverage run -m pytest -v
