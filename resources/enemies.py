@@ -65,7 +65,9 @@ class Enemies(MethodView):
         """
         Get enemy information by id.
         """ 
-        enemy = EnemyModel.query.get_or_404(enemy_id)
+        enemy = db.session.get(EnemyModel, enemy_id)
+        if enemy is None:
+            abort(404)
         return enemy
 
     @blp.arguments(EnemySchema)
@@ -77,7 +79,9 @@ class Enemies(MethodView):
 
         Only modified data is updated.
         """
-        enemy = EnemyModel.query.get_or_404(enemy_id)
+        enemy = db.session.get(EnemyModel, enemy_id)
+        if enemy is None:
+            abort(404)
         try:
             db.session.query(EnemyModel).filter(EnemyModel.id == enemy_id).update(request_data)
             db.session.commit()

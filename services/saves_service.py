@@ -69,7 +69,9 @@ def delete_all_saves():
 
 
 def get_save_by_id(id):
-    save_file = Save.query.get_or_404(id)
+    save_file = db.session.get(Save, id)
+    if save_file is None:
+        abort(404)
     party = Party.query.filter_by(save_id=id).all()
     party_members = []
     party_lead = {}
@@ -88,7 +90,9 @@ def get_save_by_id(id):
 
 def delete_save_by_id(id):
     try:
-        save_file = Save.query.get_or_404(id)
+        save_file = db.session.get(Save, id)
+        if save_file is None:
+            abort(404)
         db.session.delete(save_file)
         db.session.commit()
         return {"message": f"deleted {id}"}
