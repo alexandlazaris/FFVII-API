@@ -5,7 +5,7 @@ from models import Party, Save
 
 
 def create_party(body, id):
-    target_save = Save.query.get(id)
+    target_save = db.session.get(Save, id)
     if target_save == None:
         abort(404, message=f"Save {id} cannot be found. Ensure the save id valid.")
     # step 1 - form new party
@@ -43,7 +43,7 @@ def get_party_using_save(id):
 def update_party_using_save(body, id):
     try:
         # step 1 - validate target save
-        target_save = Save.query.get(id)
+        target_save = db.session.get(Save, id)
         if target_save == None:
             abort(404, message=f"Save {id} cannot be found. Ensure the save id valid.")
         # step 2 - delete existing party

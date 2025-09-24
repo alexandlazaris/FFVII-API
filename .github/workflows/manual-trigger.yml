@@ -1,37 +1,35 @@
-name: Run migration
-
+name: Upgrade prod db
 on:
   push: 
     branches:
-      - workflow-migrate-trigger
+      - main
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Environment to deploy to'
+      upgrade_prod:
+        description: 'Upgrade prod?'
+        type: boolean
         required: true
-        default: 'dev'
-
+        default: false
 jobs:
   validate_inputs:
     runs-on: ubuntu-latest
-
-    environment: dev
-    
+    environment: prod
     steps:
-    - name: Print env var
-      run: echo "env var value is >${{ vars.VAR }}<"
+      - name: Print choice
+        run: echo "${{ github.event.inputs.upgrade_prod }}"
+      
+      - name: Validate choice
+        if: ${{ github.event.inputs.upgrade_prod == 'false' }}
+        run: |
+          echo "Upgrade prod was false. Quitting workflow"
+          exit 1
 
-    - name: Get secret name
-      run: echo "env secret value is ${{ secrets.NAME }}"
-
-    - name: Validate environment
-      if: ${{ inputs.environment == 'dev' }}
-      run: echo "deploying to ${{inputs.environment}}"
-
-  python:
+  upgrade:
     needs: validate_inputs
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -46,8 +44,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Print Flask routes
-        run: flask routes
-
-    
-  
+      - name: Upgrade db
+        run: |
+          flask db current
+          flask db heads
+          flask db upgrade

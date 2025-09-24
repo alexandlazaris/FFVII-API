@@ -32,18 +32,19 @@ def test_get_party_by_save_id(client, app):
     assert response.status_code == 200
     assert len(json) == 3
 
-def test_update_party(client, app):
+def test_add_member_to_existing_party(client, app):
     with app.app_context():
         save_1 = Save(id="123", location="gongaga")
         db.session.add(save_1)
-        party_member_1 = Party(id="1", name="Cloud", save_id="999")
+        party_member_1 = Party(id="1", name="Cloud", save_id="123")
         db.session.add(party_member_1)
         db.session.commit()
-    body = [{"name": "Barret"}]
+    new_party = [{"name": "Cloud"}, {"name": "Barret"}]
     response = client.put(
-        "/party/123", json=body
+        "/party/123", json=new_party
     )    
     json = response.get_json()
     assert response.status_code == 200
-    assert len(json) == 1
-    assert json[0]["name"] == body[0]["name"]
+    assert len(json) == 2
+    assert json[0]["name"] == "Cloud"
+    assert json[1]["name"] == "Barret"
