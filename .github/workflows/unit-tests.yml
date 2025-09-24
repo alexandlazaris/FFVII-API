@@ -31,5 +31,3 @@ jobs:
       - name: Run tests with Coverage
         run: |
           coverage run -m pytest -v -s
-          coverage html
-          htmlcov/index.html
