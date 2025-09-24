@@ -44,6 +44,7 @@ def test_update_party(client, app):
         "/party/123", json=body
     )    
     json = response.get_json()
+    print (json)
     assert response.status_code == 200
     assert len(json) == 1
     assert json[0]["name"] == body[0]["name"]
