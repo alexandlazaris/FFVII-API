@@ -6,11 +6,13 @@ on:
       - modify-deploy-workflow
   workflow_dispatch:
     inputs:
-      choice:
+      upgrade_prod:
+        type: choice
         description: 'Update prod?'
+        options:
+        - yes
+        - no
         required: true
-        default: 'no'
-
 jobs:
   validate_inputs:
     runs-on: ubuntu-latest
@@ -22,10 +24,10 @@ jobs:
       - name: Validate choice
         if: ${{ github.event.inputs.choice == 'no' }}
         run: |
-          echo "Choice is to not update prod db, quitting workflow"
+          echo "'No' was selected, quitting workflow"
           exit 1
 
-  python:
+  upgrade:
     needs: validate_inputs
     runs-on: ubuntu-latest
     environment: prod
@@ -45,7 +47,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run db migration
+      - name: Upgrade db
         run: |
           flask db current
           flask db heads
