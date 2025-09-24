@@ -1,5 +1,4 @@
-name: Run migration
-
+name: Upgrade prod db
 on:
   push: 
     branches:
@@ -8,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       choice:
-        description: 'Run migration?'
+        description: 'Update prod?'
         required: true
         default: 'no'
 
@@ -21,9 +20,9 @@ jobs:
         run: echo "${{ github.event.inputs.choice }}"
       
       - name: Validate choice
-        if: ${{ github.event.inputs.choice }}
+        if: ${{ github.event.inputs.choice == 'no' }}
         run: |
-          echo "Quitting workflow"
+          echo "Choice is to not update prod db, quitting workflow"
           exit 1
 
   python:
