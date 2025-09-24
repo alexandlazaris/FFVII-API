@@ -3,15 +3,11 @@ on:
   push: 
     branches:
       - main
-      - modify-deploy-workflow
   workflow_dispatch:
     inputs:
       upgrade_prod:
-        type: choice
-        description: 'Update prod?'
-        options:
-        - yes
-        - no
+        description: 'Upgrade prod?'
+        type: boolean
         required: true
 jobs:
   validate_inputs:
