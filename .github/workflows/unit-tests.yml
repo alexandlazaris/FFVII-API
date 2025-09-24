@@ -24,12 +24,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-    #   - name: Run tests with Coverage
-    #     run: |
-    #       coverage run -m pytest -v
-    #       coverage html
-    #       htmlcov/index.html
-          
-      - name: Run tests with Pytest
+      - name: Run tests with Coverage
         run: |
-          pytest -v
+          coverage run -m pytest -v
+          coverage html
+          htmlcov/index.html
