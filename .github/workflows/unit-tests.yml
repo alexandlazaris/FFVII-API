@@ -1,9 +1,11 @@
 name: Unit tests
 on:
-  push: 
-    branches:
+  push:
+    branches-ignore:
       - main
-      - modify-deploy-workflow
+  pull_request:
+    branches-ignore:
+      - main
 
 jobs:
   run_unit_tests:
