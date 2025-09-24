@@ -9,16 +9,17 @@ on:
         description: 'Upgrade prod?'
         type: boolean
         required: true
+        default: false
 jobs:
   validate_inputs:
     runs-on: ubuntu-latest
     environment: prod
     steps:
       - name: Print choice
-        run: echo "${{ github.event.inputs.choice }}"
+        run: echo "${{ github.event.inputs.upgrade_prod }}"
       
       - name: Validate choice
-        if: ${{ github.event.inputs.choice == 'no' }}
+        if: ${{ github.event.inputs.upgrade_prod == 'false' }}
         run: |
           echo "'No' was selected, quitting workflow"
           exit 1
