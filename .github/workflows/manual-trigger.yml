@@ -21,7 +21,7 @@ jobs:
       - name: Validate choice
         if: ${{ github.event.inputs.upgrade_prod == 'false' }}
         run: |
-          echo "'No' was selected, quitting workflow"
+          echo "Upgrade prod was false. Quitting workflow"
           exit 1
 
   upgrade:
