@@ -2,6 +2,7 @@
 
 [![migrations](https://github.com/alexandlazaris/FFVII-API/actions/workflows/manual-trigger.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/manual-trigger.yml) 
 [![Unit tests](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml)
+[![Release](https://github.com/alexandlazaris/FFVII-API/actions/workflows/release.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/release.yml)
 
 Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST API?! 
 
