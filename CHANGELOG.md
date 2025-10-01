@@ -1,6 +1,107 @@
 # CHANGELOG
 
 
+## v2.0.1 (2025-10-01)
+
+### Bug Fixes
+
+- Correct the flask db commands
+  ([`3b6acc8`](https://github.com/alexandlazaris/FFVII-API/commit/3b6acc8f61ab75fdc3544289eeb6e007418eebac))
+
+- Remove unneeded line
+  ([`f411d19`](https://github.com/alexandlazaris/FFVII-API/commit/f411d196bb7f72ccb8620f49652db69344c942dc))
+
+- Replace depricated orm function with new feature to get records
+  ([`cb2f6f4`](https://github.com/alexandlazaris/FFVII-API/commit/cb2f6f484b7263e610a1bbf7b386d44ffaa81ddd))
+
+- Split up db url setting
+  ([`453462c`](https://github.com/alexandlazaris/FFVII-API/commit/453462c6875b343189c809288cffefa449d92708))
+
+- Update failing unit test logic
+  ([`43f8982`](https://github.com/alexandlazaris/FFVII-API/commit/43f89820e77fa58d5a77daf615348d42d8000987))
+
+### Chores
+
+- Added temp mdoel change to trigger db migration
+  ([`cbce42f`](https://github.com/alexandlazaris/FFVII-API/commit/cbce42f1451d8cb8cbce848fb6757767bf3eec2d))
+
+### Continuous Integration
+
+- Change false check
+  ([`bc765fa`](https://github.com/alexandlazaris/FFVII-API/commit/bc765fa9649486775a1c5e4ebddf72054432e80f))
+
+- Change manual trigger workflow
+  ([`5a66cdc`](https://github.com/alexandlazaris/FFVII-API/commit/5a66cdc834b43615fa844e48eeca68ed2b362443))
+
+- Change text input to choice list
+  ([`bc5965f`](https://github.com/alexandlazaris/FFVII-API/commit/bc5965fb2fa162fdf10ebba1431df8349fc061ad))
+
+- Change type to boolean
+  ([`ab8f9a5`](https://github.com/alexandlazaris/FFVII-API/commit/ab8f9a5851a1c49ec16c0b211c622a35b3cebb81))
+
+- Fix default value for existing saves
+  ([`982c429`](https://github.com/alexandlazaris/FFVII-API/commit/982c42985acbc535e6308ec65960574091b22af4))
+
+- Fix step syntax
+  ([`6b628f3`](https://github.com/alexandlazaris/FFVII-API/commit/6b628f306d8989bb9307df1360c1bcb48c68dd34))
+
+- Logging
+  ([`b2cac99`](https://github.com/alexandlazaris/FFVII-API/commit/b2cac9950533e6efedc78222bc7aca5342a8c4c7))
+
+- Manual workflow trigger ([#15](https://github.com/alexandlazaris/FFVII-API/pull/15),
+  [`b23d000`](https://github.com/alexandlazaris/FFVII-API/commit/b23d000bf3b2995eccd85c5880d5bf274a16fa69))
+
+- Remove 'environment' from unit tests workflow
+  ([`d93da04`](https://github.com/alexandlazaris/FFVII-API/commit/d93da0435648698342c09b596d69ec180078c119))
+
+- Remove feat branch from workflow
+  ([`2cfb36c`](https://github.com/alexandlazaris/FFVII-API/commit/2cfb36c8ddc06829170d5b5c05878ed0911588fb))
+
+- Remove unnecessary html output
+  ([`2e3f011`](https://github.com/alexandlazaris/FFVII-API/commit/2e3f011839dc84f93571347b71c754c6ae797c1e))
+
+- Restore default coverage trigger
+  ([`05e3e2c`](https://github.com/alexandlazaris/FFVII-API/commit/05e3e2c96741530705e7c05928d0c4701316e6a9))
+
+- Restore original token
+  ([`9cbc14d`](https://github.com/alexandlazaris/FFVII-API/commit/9cbc14d2cea1646f75f903b388f7e12ba2588bb0))
+
+- Run unit tests only on feature branch push
+  ([`7162c0f`](https://github.com/alexandlazaris/FFVII-API/commit/7162c0fffbad884c736fcc5ad7c6ae9802191201))
+
+- Run unit tests with pytest
+  ([`f7466ec`](https://github.com/alexandlazaris/FFVII-API/commit/f7466ece36b7bab66561d3a785c7d5f93aaa0a96))
+
+- Syntax on input
+  ([`fdb36bc`](https://github.com/alexandlazaris/FFVII-API/commit/fdb36bc67be656869450c95286867ce9aafcaf08))
+
+- Temp logging added to see failure in ci
+  ([`9f7ae5d`](https://github.com/alexandlazaris/FFVII-API/commit/9f7ae5db7996d1a8088bc1cbcd4539c46b3aeca8))
+
+- Trigger local db migration before running tests
+  ([`d084729`](https://github.com/alexandlazaris/FFVII-API/commit/d084729e19c2c66eb6c2c0ddf84079fb3feabaf7))
+
+- Try out new token
+  ([`6a8230e`](https://github.com/alexandlazaris/FFVII-API/commit/6a8230e68c51bc418004ed37f1e2b2eadd51f31b))
+
+- Unit test workflow + minor tweaks to manual trigger
+  ([`ff0ec69`](https://github.com/alexandlazaris/FFVII-API/commit/ff0ec697c15b9aa5852f2fabf23e8a311e3e8f6f))
+
+- Wording of quit msg
+  ([`1acff5e`](https://github.com/alexandlazaris/FFVII-API/commit/1acff5e762898bb34684a02ec2bec28e266d15f2))
+
+### Documentation
+
+- Add readme code snippet of /saves response
+  ([`2a3e059`](https://github.com/alexandlazaris/FFVII-API/commit/2a3e059939cb5d33f23d5ff1db51d0ea03095f2e))
+
+- Add release badge
+  ([`6bdead2`](https://github.com/alexandlazaris/FFVII-API/commit/6bdead2bf7bdc443dc66371faf735e500fcf6bd4))
+
+- Add unit test badge
+  ([`545d997`](https://github.com/alexandlazaris/FFVII-API/commit/545d9978d767d1e6536129b462b8bc7dad701f67))
+
+
 ## v2.0.0 (2025-07-08)
 
 ### Features
