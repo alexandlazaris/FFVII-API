@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v2.0.2 (2025-10-30)
+
+### Bug Fixes
+
+- Change default disc to 1
+  ([`a4f0141`](https://github.com/alexandlazaris/FFVII-API/commit/a4f01413a729f1f949f49f6d2215dd9784136861))
+
+
 ## v2.0.1 (2025-10-01)
 
 ### Bug Fixes
