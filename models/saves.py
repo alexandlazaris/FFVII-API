@@ -9,4 +9,4 @@ class Save(db.Model):
 
     id = Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
     location = db.Column(db.String(30), unique=False, nullable=False)
-    disc = db.Column(db.Integer, nullable=False, default=0)
+    disc = db.Column(db.Integer, nullable=False, server_default=db.text('1'))
