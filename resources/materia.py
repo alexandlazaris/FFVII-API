@@ -4,6 +4,7 @@ from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.materia import MateriaModel
 from schemas import MateriaSchema
+from game_data.materia.materia_data import materia_data
 import json
 
 blp = Blueprint(
@@ -23,12 +24,18 @@ class Materia(MethodView):
 
         Perform this once.
         """
+        # TODO: review this dump, seems unnecessary
         dumps_json = json.dumps(materia_data)
         loaded_json = json.loads(dumps_json)
-        for materia in loaded_json:
-            new_materia = MateriaModel(**materia)
+        for index in loaded_json:
+            m = {
+                "name": index['name'],
+                "element": index['element'],
+                "type": index['type'],
+            }
+            materia = MateriaModel(**m)
             try:
-                db.session.add(new_materia)
+                db.session.add(materia)
                 db.session.commit()
             #  TODO: add custom msg as to why it's 400
             except IntegrityError as e:
@@ -59,7 +66,6 @@ class Materia(MethodView):
             abort(500, message="Error occurred whilst inserting record.")
         return response
 
-
     @blp.response(200, MateriaSchema(many=True))
     def get(self):
         """
@@ -75,12 +81,4 @@ class Materia(MethodView):
         MateriaModel.query.delete()
         db.session.commit()
         return {"message": f"deleted {count} materia"}
-
-
-materia_data = [
-    {"name": "bolt", "element": "lightning", "level": 1},
-    {"name": "cure", "element": "restore", "level": 1},
-    {"name": "all", "element": "", "level": 1},
-    {"name": "ice", "element": "ice", "level": 2},
-    {"name": "bio", "element": "poison", "level": 3},
-]
+    
