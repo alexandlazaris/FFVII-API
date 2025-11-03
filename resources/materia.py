@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.materia import MateriaModel
 from schemas import MateriaSchema, GetMateriaSchemaQueries
 from game_data.materia.materia_data import materia_data
-from services.materia_service import filter_materia
+# from services.materia_service import filter_materia
 import json
 from flask import jsonify
 
