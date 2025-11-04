@@ -11,3 +11,4 @@ class MateriaSchema(Schema):
 class GetMateriaSchemaQueries(Schema):
     type = fields.Str(required=False)
     element = fields.Str(required=False)
+    sort = fields.Str(required=False)

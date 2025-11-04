@@ -2,6 +2,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy import desc, asc
 from models.materia import MateriaModel
 from schemas import MateriaSchema, GetMateriaSchemaQueries
 from game_data.materia.materia_data import materia_data
@@ -88,6 +89,14 @@ class Materia(MethodView):
             param = params["element"]
             if param != "":
                 query = query.filter_by(element=param)
+
+        if "sort" in params:
+            param = params["sort"]
+            if param != "":
+                if param == "asc":
+                    query = query.order_by(asc(MateriaModel.name))
+                elif param == "desc":
+                    query = query.order_by(desc(MateriaModel.name))
         return query.all()
 
     def delete(self):
