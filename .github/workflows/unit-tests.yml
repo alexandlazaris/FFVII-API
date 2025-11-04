@@ -32,4 +32,10 @@ jobs:
           
       - name: Run tests with Coverage
         run: |
-          coverage run -m pytest -v -s
+          coverage run -m pytest -v --junitxml=results.xml
+          coverage xml
+      
+      - name: Generate custom badges
+        run: |
+          genbadge coverage -i coverage.xml -o custom_badges/coverage-badge.svg
+          genbadge tests -i results.xml -o custom_badges/tests-badge.svg
