@@ -21,3 +21,4 @@ psycopg2-binary
 python-semantic-release
 pytest
 coverage
+genbadge[coverage,tests]
