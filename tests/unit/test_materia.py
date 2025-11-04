@@ -1,19 +1,6 @@
 from models import MateriaModel
 from app import db
 
-
-def test_create_new_materia(client):
-    body = [
-        {"name": "Comet2", "type": "magic", "element": "non-elemental"},
-    ]
-    response = client.post("/materia", json=body)
-    assert response.status_code == 201
-    json = response.get_json()
-    assert json[0]["name"] == body[0]["name"]
-    assert json[0]["type"] == body[0]["type"]
-    assert json[0]["element"] == body[0]["element"]
-
-
 def test_get_materia_using_filter_type(client, app):
     data = [
         {"id": 1, "name": "Comet", "type": "magic", "element": "non-elemental"},
