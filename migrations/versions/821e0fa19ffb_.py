@@ -23,11 +23,9 @@ def upgrade():
             "name", existing_type=sa.String(length=80), nullable=False
         )
 
-        # batch_op.drop_constraint("name", type_="unique")
-
         batch_op.create_unique_constraint(
-            "uix_saveid_name",  # Constraint name
-            ["save_id", "name"],  # Columns
+            "uix_saveid_name",
+            ["save_id", "name"],
         )
 
 

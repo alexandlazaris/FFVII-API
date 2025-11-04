@@ -1,8 +1,9 @@
 # FFVII-API
 
-[![migrations](https://github.com/alexandlazaris/FFVII-API/actions/workflows/manual-trigger.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/manual-trigger.yml) 
-[![Unit tests](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml)
 [![Release](https://github.com/alexandlazaris/FFVII-API/actions/workflows/release.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/release.yml)
+[![Unit tests](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml)
+![unit_tests_coverage](./custom_badges/coverage-badge.svg)
+![tests_number](./custom_badges/tests-badge.svg)
 
 Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST API?! 
 
@@ -34,11 +35,10 @@ GET /saves
 - create & manage your save files, storing key info on your party & location
 - read tips and info on bosses
 - ~~assign materia to party members~~ > unfortunately this is WIP, as it was impacted by recent changes
-- read & manage materia
+- read all in-game materia, filtering by type (e.g `magic`), element (e.g `fire`) and sort (`asc/desc`)
 
 ## coming soon
 
-- full in-game materia lists
 - full in-game enemy details
 - improved db relationships between Party members, Materia & Save States 
 - wild encounters to fight enemies and gain XP/AP/Gil
@@ -76,7 +76,6 @@ From `./`:
 2. run `coverage html`
 3. open `htmlcov/index.html` to view report
 
-Latest coverage: 79% :chart_with_upwards_trend:
 
 > [!TIP]  
 > To print logs within unit tests, append `-s` to the `coverage` command in step 1 above. Useful when debugging unit tests.
@@ -90,3 +89,4 @@ Latest coverage: 79% :chart_with_upwards_trend:
 - **DB**: sqlite for local, postgres for prod
 - **API client**: Bruno (https://www.usebruno.com/)
 - **unit tests**: pytest + (https://coverage.readthedocs.io/en/7.8.0/)
+- **custom README badges**: https://smarie.github.io/python-genbadge/

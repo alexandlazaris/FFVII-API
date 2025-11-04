@@ -1,7 +1,7 @@
 apispec==6.8.1
 blinker==1.9.0
 click==8.1.8
-Flask==3.1.0
+Flask==3.1.1
 flask-smorest==0.45.0
 Flask-SQLAlchemy==3.1.1
 greenlet==3.1.1
@@ -21,3 +21,4 @@ psycopg2-binary
 python-semantic-release
 pytest
 coverage
+genbadge[coverage,tests]
