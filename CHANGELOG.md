@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v2.1.1 (2025-11-04)
+
+### Bug Fixes
+
+- Apply the correct column change syntax for element length
+  ([`8d67ad2`](https://github.com/alexandlazaris/FFVII-API/commit/8d67ad29d237b906919ff9f0f6dde864819eb6c0))
+
+### Continuous Integration
+
+- Remove unused env var
+  ([`a09d37c`](https://github.com/alexandlazaris/FFVII-API/commit/a09d37caa8383f5f022071967765b9c8fb04d087))
+
+
 ## v2.1.0 (2025-11-04)
 
 ### Bug Fixes
