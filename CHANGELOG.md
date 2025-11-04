@@ -1,6 +1,70 @@
 # CHANGELOG
 
 
+## v2.1.0 (2025-11-04)
+
+### Bug Fixes
+
+- Remove unused import
+  ([`f2d31d8`](https://github.com/alexandlazaris/FFVII-API/commit/f2d31d8897942488bc5eda444b1f8e5074ebff01))
+
+- Resolve type differences for seed data
+  ([`97f1254`](https://github.com/alexandlazaris/FFVII-API/commit/97f1254019584de148932250eca0de2c1c9a549a))
+
+- Upgrade flask patch version to resolve dependabot issue #1
+  ([`7a5cd62`](https://github.com/alexandlazaris/FFVII-API/commit/7a5cd62c6bcc1e171a94c6e2adef3a88ebad4fd0))
+
+### Chores
+
+- Fix formatting in migration file
+  ([`c24927a`](https://github.com/alexandlazaris/FFVII-API/commit/c24927a009b3836d395ea77da31ccf6536449ae6))
+
+- Remove unneeded migration command
+  ([`943bc49`](https://github.com/alexandlazaris/FFVII-API/commit/943bc49d099dc3f891466637a7eddade0ee87e87))
+
+### Continuous Integration
+
+- Include badge generation commands
+  ([`020b20b`](https://github.com/alexandlazaris/FFVII-API/commit/020b20b25d7de06e83142bfecb3772122aaa0ddc))
+
+### Documentation
+
+- Custom badges directory
+  ([`7f6dfe9`](https://github.com/alexandlazaris/FFVII-API/commit/7f6dfe93890508e72074c185e00ea7a641317d4d))
+
+- Include custom badge generation
+  ([`327472d`](https://github.com/alexandlazaris/FFVII-API/commit/327472d31981fdf80376de747e5d82344b04f021))
+
+### Features
+
+- Add filtering to GET /materia + limit the POST data
+  ([`3d9f4ac`](https://github.com/alexandlazaris/FFVII-API/commit/3d9f4ac9403ac95063eca95d0aab67a24a2a9678))
+
+- Moved api logic for materia into separate service module & removed unused api route + matching
+  test
+  ([`8521d10`](https://github.com/alexandlazaris/FFVII-API/commit/8521d10c835f8610dd7adf2d276dbe8ae4019b44))
+
+- Query params schema for GET /materia
+  ([`ba10ee8`](https://github.com/alexandlazaris/FFVII-API/commit/ba10ee832c30a820c772470bc8eac79f27359510))
+
+- Seed full materia data into db, updated model & add migration
+  ([`35cee1a`](https://github.com/alexandlazaris/FFVII-API/commit/35cee1ad66c483ea812a9ec34a0dbd2e3dfca550))
+
+- Sort name by asc/desc
+  ([`f14183c`](https://github.com/alexandlazaris/FFVII-API/commit/f14183c203203f2fb200c8d263fa9a9662ffbf96))
+
+### Testing
+
+- Add new unit tests for asc/desc sort
+  ([`6c657d3`](https://github.com/alexandlazaris/FFVII-API/commit/6c657d3b4b4e7c65f37d8c2cf69379c30015559c))
+
+- Add test for DELETE /materia
+  ([`8f23400`](https://github.com/alexandlazaris/FFVII-API/commit/8f234002c34f620fe150db3eb0adbe9b333de8a9))
+
+- Manually seed data into db for 1 test & add extra assertions
+  ([`624bace`](https://github.com/alexandlazaris/FFVII-API/commit/624bace50de2720c236a50bd0c9de64d8f26968e))
+
+
 ## v2.0.2 (2025-10-30)
 
 ### Bug Fixes
