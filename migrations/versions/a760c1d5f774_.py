@@ -22,11 +22,11 @@ def upgrade():
         batch_op.drop_column('level')
         batch_op.add_column(sa.Column('type', sa.String(length=15), nullable=False, server_default='none'))
         batch_op.alter_column('name', existing_type=sa.String(length=15))
-        batch_op.alter_column('element', existing_type=sa.String(length=15))
+        batch_op.alter_column('element', existing_type=sa.String(length=10), type_=sa.String(length=15))
 
 def downgrade():
     with op.batch_alter_table('materia', schema=None) as batch_op:
         batch_op.add_column(sa.Column('level', sa.Integer(), nullable=False, server_default=sa.text('1')))
         batch_op.alter_column('name', existing_type=sa.String(length=30))
-        batch_op.alter_column('element', existing_type=sa.String(length=10))
+        batch_op.alter_column('element', existing_type=sa.String(length=15), type_=sa.String(length=10))
         batch_op.drop_column('type')
