@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v2.1.2 (2025-11-05)
+
+### Bug Fixes
+
+- Increase element length to 20
+  ([`8cc18b3`](https://github.com/alexandlazaris/FFVII-API/commit/8cc18b37ec58dcc7b1665d67c42920cc36c8a92c))
+
+
 ## v2.1.1 (2025-11-04)
 
 ### Bug Fixes
