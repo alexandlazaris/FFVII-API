@@ -9,11 +9,12 @@ from resources.saves import blp as SavesBlueprint
 from db import db
 from flask_migrate import Migrate
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 
 def create_app(db_url=None):
     app = Flask(__name__)
-        
+    CORS(app, methods=["GET", "POST", "PUT", "DELETE"])
     load_dotenv()    
     app.config["PROPOGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "FF7 REST API"
