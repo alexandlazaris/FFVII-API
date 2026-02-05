@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v2.2.0 (2026-02-05)
+
+### Continuous Integration
+
+- Modify secret name
+  ([`c0d4f36`](https://github.com/alexandlazaris/FFVII-API/commit/c0d4f363a595ad894d6bda48deee63f08bcf98ba))
+
+- Modify secret name used in workflow
+  ([`ef5e3b8`](https://github.com/alexandlazaris/FFVII-API/commit/ef5e3b8e490a0896e4c8b6ed18693a1a6a8accf2))
+
+### Features
+
+- Add cors support
+  ([`899d013`](https://github.com/alexandlazaris/FFVII-API/commit/899d013185aa01a9371c265601a407fa6c047045))
+
+
 ## v2.1.2 (2025-11-05)
 
 ### Bug Fixes
