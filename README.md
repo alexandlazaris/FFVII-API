@@ -64,7 +64,7 @@ GET /saves
 3. `pip install -r requirements`
 2. run `sh migrations-run-local.sh` to prep your db 
 3. start server using `gunicorn --bind 0.0.0.0:7777 "app:create_app()"`
-4. jump to `localhost:80/swagger-ui` for api docs
+4. jump to `localhost:7777/swagger-ui` for api docs
 
 ## tests
 
@@ -87,6 +87,7 @@ From `./`:
 - **OpenAPI docs**: flask-smorest (https://flask-smorest.readthedocs.io/en/latest/openapi.html)
 - **ORM**: SQLAlchemy (https://www.sqlalchemy.org/) + Flask-SQLAlchemy (https://flask-sqlalchemy.readthedocs.io/en/stable/)
 - **DB**: sqlite for local, postgres for prod
+- **Data Validation**: pydantic (https://docs.pydantic.dev/latest/)
 - **API client**: Bruno (https://www.usebruno.com/)
 - **unit tests**: pytest + (https://coverage.readthedocs.io/en/7.8.0/)
 - **custom README badges**: https://smarie.github.io/python-genbadge/
