@@ -1,10 +1,11 @@
-import json
-from flask.views import MethodView
 from flask_smorest import Blueprint, abort
+from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-from db import db
-from schemas import EnemySchema
+from pydantic import ValidationError
+from schemas import EnemyCreate, EnemyUpdate, EnemySchema, EnemyDeleted
 from models import EnemyModel
+from db import db
+from game_data.enemies.bosses import enemies
 
 blp = Blueprint(
     "Enemies",
@@ -15,6 +16,7 @@ blp = Blueprint(
 
 @blp.route("data")
 class Enemies(MethodView):
+    # find out how pydantic returns a list type containing a single schema
     @blp.response(201, EnemySchema(many=True))
     def post(self):
         """
@@ -22,21 +24,22 @@ class Enemies(MethodView):
 
         Perform this once. 
         """
-        enemies = []
-        enemies.append(boss_airbuster)
-        enemies.append(boss_schizo)
-        dumps_json = json.dumps(enemies)
-        loaded_json = json.loads(dumps_json)
-        for enemy in loaded_json:
-            new_enemy = EnemyModel(**enemy)
-            try:
+        try:
+            for enemy_dict in enemies:
+                validated_enemy = EnemyCreate(**enemy_dict)
+                new_enemy = EnemyModel(**validated_enemy.model_dump())
                 db.session.add(new_enemy)
-                db.session.commit()
-            except IntegrityError as e:
-                abort(400, message="enemies already created")
-            except SQLAlchemyError():
-                abort(500, message="Error occurred whilst inserting record.")
+            db.session.commit()
+        except ValidationError as e:
+            abort(400, message=f"Validation error: {e.errors()}")
+        except IntegrityError:
+            db.session.rollback()
+            abort(400, message="enemies already created")
+        except SQLAlchemyError:
+            db.session.rollback()
+            abort(500, message="Error occurred whilst inserting record.")        
         return EnemyModel.query.all() 
+
 
 @blp.route("")
 class Enemies(MethodView):
@@ -45,9 +48,9 @@ class Enemies(MethodView):
         """
         Gets useful in-game details of enemies.
         """
-        print("get bosses")
         return EnemyModel.query.all()
     
+    @blp.response(200, EnemyDeleted)
     def delete(self):
         """
         Delete all enemy data.
@@ -55,56 +58,43 @@ class Enemies(MethodView):
         count = EnemyModel.query.count()
         EnemyModel.query.delete()
         db.session.commit()
-        return {"message": f"deleted {count} enemies"}
+        return { "message": f"deleted {count} enemies"}
 
 
-@blp.route("/<int:enemy_id>")
+@blp.route("/<int:id>")
 class Enemies(MethodView):
     @blp.response(200, EnemySchema)
-    def get(self, enemy_id):
+    def get(self, id):
         """
         Get enemy information by id.
         """ 
-        enemy = db.session.get(EnemyModel, enemy_id)
-        if enemy is None:
-            abort(404)
-        return enemy
-
+        return EnemyModel.query.get_or_404(id)
+        
+    # RAGE: my god this was brutal, the route path arg (id) goes in the 3rd position below, I had it in 2nd position & for >2 hours spent troubleshooting why it wasn't working. fml
     @blp.arguments(EnemySchema)
     @blp.response(200, EnemySchema)
-    # RAGE: my god this was brutal, the route path arg (enemy_id) goes in the 3rd position below, I had it in 2nd position & for >2 hours spent troubleshooting why it wasn't working. fml
-    def put(self, request_data, enemy_id):
-        """
-        Update enemy information by id.
-
-        Only modified data is updated.
-        """
-        enemy = db.session.get(EnemyModel, enemy_id)
+    def put(self, request_data, id):
+        """Update enemy information by id. Only modified data is updated."""
+        enemy = db.session.get(EnemyModel, id)
         if enemy is None:
             abort(404)
         try:
-            db.session.query(EnemyModel).filter(EnemyModel.id == enemy_id).update(request_data)
+            # Validate incoming data with Pydantic
+            validated_data = EnemyUpdate(**request_data)
+            
+            # Update only provided fields
+            update_dict = validated_data.model_dump(exclude_unset=True)
+            
+            # Update the ORM object
+            for key, value in update_dict.items():
+                setattr(enemy, key, value)
             db.session.commit()
+        except ValidationError as e:
+            abort(400, message=f"Validation error: {e.errors()}")
         except IntegrityError as e:
+            db.session.rollback()
             abort(400, message=str(e.__cause__))
-        except SQLAlchemyError():
+        except SQLAlchemyError:
+            db.session.rollback()
             abort(500, message="Error occurred whilst updating record.")
         return enemy
-
-boss_schizo = {
-    "name": "Schizo",
-    "hp": 36000,
-    "description": "Multi-headed beast that deals fire, ice, lightning and earth attacks. Both heads deal elemental damage and both unleash a final attack when hp is 0.",
-    "steal": "Protect ring",
-    "location": "Gaias Cliff",
-    "disc": "2",
-}
-
-boss_airbuster = {
-    "name": "Airbuster",
-    "hp": 1200,
-    "description": "A robot created by Shinra's Weapon Development Department.",
-    "steal": "",
-    "location": "Outside No. 5 Reactor",
-    "disc": "1",
-}
