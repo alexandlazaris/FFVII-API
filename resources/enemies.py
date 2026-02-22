@@ -1,10 +1,7 @@
-import json
+from flask_smorest import Blueprint
 from flask.views import MethodView
-from flask_smorest import Blueprint, abort
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-from db import db
-from schemas import EnemySchema
-from models import EnemyModel
+from schemas import EnemySchema, EnemyDeleted
+from services.enemy_service import seed_enemy_boss_data, get_all_enemies, delete_enemy_all_enemies, get_enemy_by_id, update_enemy_by_id
 
 blp = Blueprint(
     "Enemies",
@@ -22,21 +19,7 @@ class Enemies(MethodView):
 
         Perform this once. 
         """
-        enemies = []
-        enemies.append(boss_airbuster)
-        enemies.append(boss_schizo)
-        dumps_json = json.dumps(enemies)
-        loaded_json = json.loads(dumps_json)
-        for enemy in loaded_json:
-            new_enemy = EnemyModel(**enemy)
-            try:
-                db.session.add(new_enemy)
-                db.session.commit()
-            except IntegrityError as e:
-                abort(400, message="enemies already created")
-            except SQLAlchemyError():
-                abort(500, message="Error occurred whilst inserting record.")
-        return EnemyModel.query.all() 
+        return seed_enemy_boss_data()
 
 @blp.route("")
 class Enemies(MethodView):
@@ -45,66 +28,28 @@ class Enemies(MethodView):
         """
         Gets useful in-game details of enemies.
         """
-        print("get bosses")
-        return EnemyModel.query.all()
+        return get_all_enemies()
     
+    @blp.response(200, EnemyDeleted)
     def delete(self):
         """
         Delete all enemy data.
         """
-        count = EnemyModel.query.count()
-        EnemyModel.query.delete()
-        db.session.commit()
-        return {"message": f"deleted {count} enemies"}
+        return delete_enemy_all_enemies()
 
-
-@blp.route("/<int:enemy_id>")
+@blp.route("/<int:id>")
 class Enemies(MethodView):
     @blp.response(200, EnemySchema)
-    def get(self, enemy_id):
+    def get(self, id):
         """
         Get enemy information by id.
         """ 
-        enemy = db.session.get(EnemyModel, enemy_id)
-        if enemy is None:
-            abort(404)
-        return enemy
-
+        return get_enemy_by_id(id)
+        
     @blp.arguments(EnemySchema)
     @blp.response(200, EnemySchema)
-    # RAGE: my god this was brutal, the route path arg (enemy_id) goes in the 3rd position below, I had it in 2nd position & for >2 hours spent troubleshooting why it wasn't working. fml
-    def put(self, request_data, enemy_id):
+    def put(self, request_data, id):
         """
-        Update enemy information by id.
-
-        Only modified data is updated.
+        Update enemy information by id. Only modified data is updated.
         """
-        enemy = db.session.get(EnemyModel, enemy_id)
-        if enemy is None:
-            abort(404)
-        try:
-            db.session.query(EnemyModel).filter(EnemyModel.id == enemy_id).update(request_data)
-            db.session.commit()
-        except IntegrityError as e:
-            abort(400, message=str(e.__cause__))
-        except SQLAlchemyError():
-            abort(500, message="Error occurred whilst updating record.")
-        return enemy
-
-boss_schizo = {
-    "name": "Schizo",
-    "hp": 36000,
-    "description": "Multi-headed beast that deals fire, ice, lightning and earth attacks. Both heads deal elemental damage and both unleash a final attack when hp is 0.",
-    "steal": "Protect ring",
-    "location": "Gaias Cliff",
-    "disc": "2",
-}
-
-boss_airbuster = {
-    "name": "Airbuster",
-    "hp": 1200,
-    "description": "A robot created by Shinra's Weapon Development Department.",
-    "steal": "",
-    "location": "Outside No. 5 Reactor",
-    "disc": "1",
-}
+        return update_enemy_by_id(id, request_data)

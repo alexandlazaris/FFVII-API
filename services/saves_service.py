@@ -37,7 +37,7 @@ def get_all_saves():
     except SQLAlchemyError:
         abort(500, message="Error fetching all saves.")
 
-
+# TODO: convert json using pydantic
 def create_save(body):
     dumps_json = json.dumps(body)
     loaded_json = json.loads(dumps_json)
