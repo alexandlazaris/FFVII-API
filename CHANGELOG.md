@@ -1,6 +1,46 @@
 # CHANGELOG
 
 
+## v2.3.0 (2026-02-22)
+
+### Chores
+
+- Add TODO
+  ([`d0f4fed`](https://github.com/alexandlazaris/FFVII-API/commit/d0f4fed2cc25cb3d7a7bdb1553fd8933e4c94966))
+
+- Dependabot version bumps
+  ([`5064c1d`](https://github.com/alexandlazaris/FFVII-API/commit/5064c1dff2f43865f5571dfd6786b105ad5922ee))
+
+- Install pydantic
+  ([`ea55388`](https://github.com/alexandlazaris/FFVII-API/commit/ea553881b04972ba4ac4f110553f32a738ba331a))
+
+### Continuous Integration
+
+- Revert to previous token name
+  ([`884d8e0`](https://github.com/alexandlazaris/FFVII-API/commit/884d8e0e2d59c1a4d1766c43c4e18247eb6bccdd))
+
+### Documentation
+
+- Include pydantic in readme
+  ([`db26343`](https://github.com/alexandlazaris/FFVII-API/commit/db26343286775ca75778731f2df5072ad39c1a41))
+
+### Features
+
+- Add healthcheck endpoint for external use
+  ([`bb80a62`](https://github.com/alexandlazaris/FFVII-API/commit/bb80a620908e920226a22fe9c624f682fa0d911f))
+
+- Convert data handling to use pydantic + new schemas generated
+  ([`5a834ae`](https://github.com/alexandlazaris/FFVII-API/commit/5a834ae8067b04d622c199620970a1968caa6fde))
+
+- Split up enemy domain logic into service file
+  ([`a6bd750`](https://github.com/alexandlazaris/FFVII-API/commit/a6bd750c2ebc9fd7a8703b7ffa4586ce48f402dc))
+
+### Testing
+
+- Unit test for healthcheck
+  ([`82556df`](https://github.com/alexandlazaris/FFVII-API/commit/82556df283246c65327c894bbbf94aad7e4cf9d4))
+
+
 ## v2.2.0 (2026-02-05)
 
 ### Continuous Integration
