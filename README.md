@@ -1,6 +1,8 @@
 # FFVII-API
 
 [![Release](https://github.com/alexandlazaris/FFVII-API/actions/workflows/release.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/release.yml)
+[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v2/monitor/2ghkb.svg)](https://uptime.betterstack.com/?utm_source=status_badge)
+
 [![Unit tests](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/alexandlazaris/FFVII-API/actions/workflows/unit-tests.yml)
 ![unit_tests_coverage](./custom_badges/coverage-badge.svg)
 ![tests_number](./custom_badges/tests-badge.svg)
