@@ -3,6 +3,6 @@ services:
   web:
     build: .
     ports:
-      - "60:5000"
+      - "60:7777"
     volumes:
       - .:/app
