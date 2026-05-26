@@ -3,14 +3,12 @@ from flask_smorest import Blueprint
 from schemas import SaveRequestSchema, SaveResponseSchema
 from services.saves_service import get_all_saves, create_save, delete_all_saves, get_save_by_id, delete_save_by_id
 
-
 blp = Blueprint(
     "Save",
     __name__,
     url_prefix="/saves",
     description="CRUD for save files",
 )
-
 
 @blp.route("")
 class SaveApi(MethodView):
@@ -25,7 +23,7 @@ class SaveApi(MethodView):
     @blp.response(200, SaveResponseSchema(many=True))
     def get(self):
         """ 
-        Get all save files with party info
+        Get all save files including party info
         """
         return get_all_saves()
 

@@ -5,6 +5,10 @@ from models.saves import Save
 from models.party import Party
 import json
 from flask import jsonify
+import logging
+
+# module level logger
+logger = logging.getLogger(__name__)
 
 
 def form_party_lead_obj(party):
@@ -13,8 +17,10 @@ def form_party_lead_obj(party):
     party_lead = {"name": party_lead_name, "level": party_lead_level}
     return party_lead
 
+
 def get_all_saves():
     try:
+        logger.info('fetching all saves')
         all_saves = Save.query.all()
         response = []
         for each_save in all_saves:
@@ -37,6 +43,7 @@ def get_all_saves():
     except SQLAlchemyError:
         abort(500, message="Error fetching all saves.")
 
+
 # TODO: convert json using pydantic
 def create_save(body):
     dumps_json = json.dumps(body)
@@ -47,6 +54,7 @@ def create_save(body):
         db.session.commit()
         return {"id": new_save.id, "location": new_save.location}
     except IntegrityError as e:
+        logger.error(e.detail)
         abort(400, message=str(e.__cause__))
     except SQLAlchemyError:
         db.session.rollback()
@@ -71,6 +79,7 @@ def delete_all_saves():
 def get_save_by_id(id):
     save_file = db.session.get(Save, id)
     if save_file is None:
+        logger.warning(f'save {id} not found')
         abort(404)
     party = Party.query.filter_by(save_id=id).all()
     party_members = []
@@ -79,7 +88,7 @@ def get_save_by_id(id):
         for m in party:
             party_members.append(m.name)
         party_lead = form_party_lead_obj(party)
-    save_info = {
+    save_info = {   
         "id": save_file.id,
         "location": save_file.location,
         "party": party_members,

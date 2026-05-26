@@ -11,9 +11,14 @@ from db import db
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_cors import CORS
+from logging_config import setup_logging
 
+import logging
+logger = logging.getLogger(__name__)
 
 def create_app(db_url=None):
+    setup_logging()
+    logger.info('starting up app')
     app = Flask(__name__)
     CORS(app, methods=["GET", "POST", "PUT", "DELETE"])
     load_dotenv()    
@@ -26,20 +31,19 @@ def create_app(db_url=None):
     app.config["OPENAPI_SWAGGER_UI_URL"] = (
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     )
-    
+    logging.info('setting api configs')
     db_url = os.getenv("DATABASE_URL", "sqlite:///data.db")
-
+    logging.info('starting db url')
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
     migrate = Migrate(app, db)
     api = Api(app)
-
+    logging.info('registering blueprints')
     api.register_blueprint(CharactersBlueprint)
     api.register_blueprint(PartyBlueprint)
     api.register_blueprint(EnemiesBlueprint)
     api.register_blueprint(MateriaBlueprint)
     api.register_blueprint(SavesBlueprint)
-    api.register_blueprint(HealthCheckBlueprint)
-
+    api.register_blueprint(HealthCheckBlueprint)    
     return app
