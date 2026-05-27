@@ -13,6 +13,7 @@ LOGGING_CONFIG = {
             "datefmt": "%Y-%m-%dT%H:%M:%S%z"
         },
     },
+    # handler accepts everything
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
@@ -21,10 +22,11 @@ LOGGING_CONFIG = {
             "stream": "ext://sys.stdout",
         },
     },
+    # root logger decides what appears
     "loggers": {
-        "": {  # Root logger
+        "": {  # root logger
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": "WARNING",
             "propagate": True,
         },
     }
