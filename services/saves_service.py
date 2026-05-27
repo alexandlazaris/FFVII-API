@@ -20,7 +20,7 @@ def form_party_lead_obj(party):
 
 def get_all_saves():
     try:
-        logger.info('fetching all saves')
+        logger.info("fetching all saves")
         all_saves = Save.query.all()
         response = []
         for each_save in all_saves:
@@ -40,7 +40,8 @@ def get_all_saves():
             }
             response.append(save_info)
         return jsonify(response)
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
+        logger.error(str(e.__cause__))
         abort(500, message="Error fetching all saves.")
 
 
@@ -52,16 +53,17 @@ def create_save(body):
     try:
         db.session.add(new_save)
         db.session.commit()
+        logger.info("new save created")
         return {"id": new_save.id, "location": new_save.location}
     except IntegrityError as e:
-        logger.error(e.detail)
-        abort(400, message=str(e.__cause__))
-    except SQLAlchemyError:
+        abort(400, message=f"Invalid request: {body}")
+    except SQLAlchemyError as e:
         db.session.rollback()
         abort(500, message="Error occurred whilst creating save.")
 
 
 def delete_all_saves():
+    logger.warning("deleting all saves")
     try:
         count = Save.query.count()
         all_saves = Save.query.all()
@@ -70,7 +72,8 @@ def delete_all_saves():
             db.session.commit()
         Save.query.delete()
         db.session.commit()
-        return {"message": f"deleted {count} save file/s"}
+        logger.warning(f"deleted {count} saves")
+        return {"message": f"deleted {count} save"}
     except SQLAlchemyError as e:
         db.session.rollback()
         abort(500, message="Error deleting saves.")
@@ -79,7 +82,7 @@ def delete_all_saves():
 def get_save_by_id(id):
     save_file = db.session.get(Save, id)
     if save_file is None:
-        logger.warning(f'save {id} not found')
+        logger.warning(f"save {id} not found")
         abort(404)
     party = Party.query.filter_by(save_id=id).all()
     party_members = []
@@ -88,12 +91,13 @@ def get_save_by_id(id):
         for m in party:
             party_members.append(m.name)
         party_lead = form_party_lead_obj(party)
-    save_info = {   
+    save_info = {
         "id": save_file.id,
         "location": save_file.location,
         "party": party_members,
         "party_lead": party_lead,
     }
+    logger.info(f"save has been fetched")
     return save_info
 
 
@@ -104,6 +108,7 @@ def delete_save_by_id(id):
             abort(404)
         db.session.delete(save_file)
         db.session.commit()
+        logger.warning(f"save {id} has been deleted")
         return {"message": f"deleted {id}"}
     except SQLAlchemyError as e:
         db.session.rollback()
