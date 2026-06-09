@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "LOGFIRE env is $LOGFIRE_ENVIRONMENT"
+
 echo "---> run migrations"
 flask db upgrade
 

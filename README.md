@@ -93,6 +93,4 @@ From `./`:
 - **API client**: Bruno (https://www.usebruno.com/)
 - **unit tests**: pytest + (https://coverage.readthedocs.io/en/7.8.0/)
 - **custom README badges**: https://smarie.github.io/python-genbadge/
-- **opentelemetry**: Logfire (https://pydantic.dev/logfire)
-
-## 
+- **observability**: Logfire (https://pydantic.dev/logfire)

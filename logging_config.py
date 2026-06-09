@@ -1,5 +1,5 @@
 """
-Sourced from https://signoz.io/guides/python-logging-best-practices/#4-centralize-your-logging-configuration
+I have sourced the config from https://signoz.io/guides/python-logging-best-practices/#4-centralize-your-logging-configuration
 """
 
 import logging.config
@@ -20,13 +20,13 @@ LOGGING_CONFIG = {
             "formatter": "standard",
             "level": "DEBUG",
             "stream": "ext://sys.stdout",
-        },
+        },      
     },
     # root logger decides what appears
     "loggers": {
         "": {  # root logger
             "handlers": ["console"],
-            "level": "WARNING",
+            "level": "DEBUG",
             "propagate": True,
         },
     }

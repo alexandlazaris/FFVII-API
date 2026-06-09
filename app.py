@@ -12,16 +12,22 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_cors import CORS
 from logging_config import setup_logging
-
 import logging
+import logfire
+
 logger = logging.getLogger(__name__)
 
 def create_app(db_url=None):
     setup_logging()
     logger.info('starting up app')
     app = Flask(__name__)
-    CORS(app, methods=["GET", "POST", "PUT", "DELETE"])
+    # TODO: confirm if this is the best place for logfire, maybe it can be imported from separate module
+    # TODO: pull in these vars through env vars locally & populate from GH for prod
     load_dotenv()    
+    logfire.configure(service_name=os.getenv("SERVICE_NAME"), environment=os.getenv("LOGFIRE_ENVIRONMENT"))
+    logfire.instrument_flask(app)
+    logging.info("logfire initialised")
+    CORS(app, methods=["GET", "POST", "PUT", "DELETE"])
     app.config["PROPOGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "FF7 REST API"
     app.config["API_VERSION"] = "1.0.0"
