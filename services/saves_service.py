@@ -72,8 +72,8 @@ def delete_all_saves():
             db.session.commit()
         Save.query.delete()
         db.session.commit()
-        logger.warning(f"deleted {count} saves")
-        return {"message": f"deleted {count} save"}
+        logger.warning(f"deleted {count} save(s)")
+        return {"message": f"deleted {count} save(s)"}
     except SQLAlchemyError as e:
         db.session.rollback()
         abort(500, message="Error deleting saves.")

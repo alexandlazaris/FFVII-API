@@ -31,7 +31,7 @@ def test_delete_all_saves(client, app):
     response = client.delete("/saves")
     assert response.status_code == 200
     json = response.get_json()
-    assert json["message"] == "deleted 2 save file/s"
+    assert json["message"] == "deleted 2 save(s)"
 
 def test_get_save_by_id(client, app):
     with app.app_context():
