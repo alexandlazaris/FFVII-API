@@ -5,10 +5,11 @@ from models.materia import MateriaModel
 import json
 from sqlalchemy import desc, asc
 from game_data.materia.materia_data import materia_data
+import logging
 
+logger = logging.getLogger(__name__)
 
 def get_materia_with_filters(params):
-    print("filtering")
     query = MateriaModel.query
     if "type" in params:
         param = params["type"]
@@ -33,7 +34,7 @@ def get_materia_with_filters(params):
 def seed_materia_data():
     query = MateriaModel.query
     if query.count() == materia_data.__len__():
-        print("materia data has already been seeded, skipping", flush=True)
+        logger("materia data has already been seeded, skipping", flush=True)
         abort(400)
     else:
         # TODO: below needs to be refactored, messy json handling
