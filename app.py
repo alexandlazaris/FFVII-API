@@ -9,24 +9,23 @@ from resources.saves import blp as SavesBlueprint
 from resources.health_check import blp as HealthCheckBlueprint
 from db import db
 from flask_migrate import Migrate
-from dotenv import load_dotenv
 from flask_cors import CORS
-from logging_config import setup_logging
+from telemetry.logging_config import setup_logging
+from telemetry.telemetry import telemetry 
 import logging
-import logfire
-
 logger = logging.getLogger(__name__)
 
-def create_app(db_url=None):
-    setup_logging()
+def create_app(is_testing=None):
     logger.info('starting up app')
     app = Flask(__name__)
-    # TODO: confirm if this is the best place for logfire, maybe it can be imported from separate module
-    # TODO: pull in these vars through env vars locally & populate from GH for prod
-    load_dotenv()    
-    logfire.configure(service_name=os.getenv("SERVICE_NAME"), environment=os.getenv("LOGFIRE_ENVIRONMENT"))
-    logfire.instrument_flask(app)
-    logging.info("logfire initialised")
+
+    if is_testing is True:
+        print ("skipping telemetry initialisations during testing")
+
+    elif is_testing is False:
+        setup_logging()
+        telemetry.initialise(app)
+        
     CORS(app, methods=["GET", "POST", "PUT", "DELETE"])
     app.config["PROPOGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "FF7 REST API"
