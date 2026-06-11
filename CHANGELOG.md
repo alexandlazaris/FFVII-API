@@ -1,6 +1,82 @@
 # CHANGELOG
 
 
+## v3.0.0 (2026-06-11)
+
+### Chores
+
+- (temp) add debug level logs to gunicorn
+  ([`1d24c0a`](https://github.com/alexandlazaris/FFVII-API/commit/1d24c0a69a3a2c9dfd931a734a68bef7919a5a2b))
+
+- Addressing dependabot alerts
+  ([`27c2f7a`](https://github.com/alexandlazaris/FFVII-API/commit/27c2f7a7c7446fa2996408daa751d5dd17032882))
+
+- Ignore similar filename for virtual directory
+  ([`ca16997`](https://github.com/alexandlazaris/FFVII-API/commit/ca16997b6c4ac3b84ccd6a06151b79e244b5cc86))
+
+- Include logfire deps
+  ([`0c9b5ae`](https://github.com/alexandlazaris/FFVII-API/commit/0c9b5ae1af6a4fc9e6d4793c2002f22573afa0ea))
+
+- Remove print
+  ([`d26cbc2`](https://github.com/alexandlazaris/FFVII-API/commit/d26cbc2be66545b0ff7da041bfb44ac72e39b8db))
+
+- Update env templat with new vars
+  ([`e7cec0f`](https://github.com/alexandlazaris/FFVII-API/commit/e7cec0f4dbe75a56caeb376feb6ffd9c38549570))
+
+- Upgraded level to warning
+  ([`21de71f`](https://github.com/alexandlazaris/FFVII-API/commit/21de71fcc98543f7f411af4dff38088d5a973a2a))
+
+### Continuous Integration
+
+- Removing unneeded migration trigger
+  ([`03ada09`](https://github.com/alexandlazaris/FFVII-API/commit/03ada09ff6e8490250cd8aca6eee1fbd54209283))
+
+- Temp removal of migration script
+  ([`0c85e25`](https://github.com/alexandlazaris/FFVII-API/commit/0c85e2598fda7355899030e58f3fffcab04d8ee4))
+
+- Upgrade checkout action version
+  ([`fbbd646`](https://github.com/alexandlazaris/FFVII-API/commit/fbbd6461ba08b5c73cbb1293daf5a8aa712d269c))
+
+### Documentation
+
+- Add Better Stack badge to README
+  ([`e403511`](https://github.com/alexandlazaris/FFVII-API/commit/e4035119cb7d6ed0e11dbb18a51d6163aa360c14))
+
+- Add logire link
+  ([`df6dfdb`](https://github.com/alexandlazaris/FFVII-API/commit/df6dfdb184886a1cb5fe2b7af953a284622768ac))
+
+### Features
+
+- Add logging for happy path & error states
+  ([`403fa73`](https://github.com/alexandlazaris/FFVII-API/commit/403fa73c2157ac5b2def40d6dcff5f5949264918))
+
+- Introduce python logging library
+  ([`b9b3e16`](https://github.com/alexandlazaris/FFVII-API/commit/b9b3e163ef2b42a1f93f266a3880e0cc9a8a94cc))
+
+- Split up & minimize app setup
+  ([`698afcf`](https://github.com/alexandlazaris/FFVII-API/commit/698afcf75cc76039b1d67e7d865f33703f57013d))
+
+BREAKING CHANGE: The create_app function has changed, reducing in complexity, in bloat and moving
+  towards isolated module definitions
+
+- Split up telemetry into separate module, cleaned up app setup steps, pass in a testing flag for
+  app setup
+  ([`e98c134`](https://github.com/alexandlazaris/FFVII-API/commit/e98c13492c6b0b3c379a6cfb9af4a9a2411b3293))
+
+- Touch ups for logfire introduction
+  ([`e6288c3`](https://github.com/alexandlazaris/FFVII-API/commit/e6288c3e34d08033ef0d9a801eea693fab5b107b))
+
+### Testing
+
+- Update strings used in test
+  ([`e4d5a41`](https://github.com/alexandlazaris/FFVII-API/commit/e4d5a416d4d05178c340fba8c0d0aec72f829bbc))
+
+### Breaking Changes
+
+- The create_app function has changed, reducing in complexity, in bloat and moving towards isolated
+  module definitions
+
+
 ## v2.3.0 (2026-02-22)
 
 ### Chores
