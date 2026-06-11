@@ -36,7 +36,7 @@ GET /saves
 - create & manage your party of up to 3 characters
 - create & manage your save files, storing key info on your party & location
 - read tips and info on bosses
-- ~~assign materia to party members~~ > unfortunately this is WIP, as it was impacted by recent changes
+- ~~assign materia to party members~~ > broken, do not use, started this way too early
 - read all in-game materia, filtering by type (e.g `magic`), element (e.g `fire`) and sort (`asc/desc`)
 
 ## coming soon
@@ -93,3 +93,4 @@ From `./`:
 - **API client**: Bruno (https://www.usebruno.com/)
 - **unit tests**: pytest + (https://coverage.readthedocs.io/en/7.8.0/)
 - **custom README badges**: https://smarie.github.io/python-genbadge/
+- **observability**: Logfire (https://pydantic.dev/logfire)

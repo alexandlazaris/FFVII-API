@@ -6,4 +6,4 @@ docker build -t dev-api-flask-ff7 .
 
 echo "---> running local container"
 
-docker run -dp 7777:7777 dev-api-flask-ff7:latest
+docker run --env-file .env -dp 7777:7777 dev-api-flask-ff7:latest

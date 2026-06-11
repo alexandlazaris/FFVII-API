@@ -2,11 +2,15 @@ from flask_smorest import abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models import Party, Save
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def create_party(body, id):
     target_save = db.session.get(Save, id)
     if target_save == None:
+        logger.error("Save id not provided")
         abort(404, message=f"Save {id} cannot be found. Ensure the save id valid.")
     # step 1 - form new party
     new_party = []
@@ -15,12 +19,15 @@ def create_party(body, id):
         new_party.append(member)
     # step 2 - validate new party
     if new_party.__len__() < 1 or new_party.__len__() > 3:
+        logger.error(f"Party size of {new_party.__len__()} invalid")
         abort(400, message="Party size invalid. Must be between 1-3 members.")
     try:
         db.session.add_all(new_party)
         db.session.commit()
+        logger.info("new party created")
         return new_party
     except IntegrityError as e:
+        logger.error(e.detail)
         abort(
             400,
             message=f"Error adding new members. Ensure each party member is unique.",
@@ -28,6 +35,7 @@ def create_party(body, id):
     except SQLAlchemyError():
         db.session.rollback()
         abort(500, message="Error occurred whilst inserting record.")
+
 
 def get_party_using_save(id):
     try:
