@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v3.0.1 (2026-06-16)
+
+### Bug Fixes
+
+- Check if flask in run args
+  ([`d65af3c`](https://github.com/alexandlazaris/FFVII-API/commit/d65af3ce0b7b99110daf38dc1ada80efb62ce5d3))
+
+- Simplify telemetry skip using env var
+  ([`ec126ba`](https://github.com/alexandlazaris/FFVII-API/commit/ec126ba3c3f2bb0516e07094d768ce4122c18353))
+
+
 ## v3.0.0 (2026-06-11)
 
 ### Chores
