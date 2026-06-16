@@ -46,6 +46,6 @@ jobs:
 
       - name: Upgrade db
         run: |
-          flask db current
-          flask db heads
-          flask db upgrade
+          DISABLE_TELEMETRY=1 flask db current
+          DISABLE_TELEMETRY=1 flask db heads
+          DISABLE_TELEMETRY=1 flask db upgrade

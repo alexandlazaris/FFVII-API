@@ -1,3 +1,4 @@
+import sys
 import os
 from flask import Flask
 from flask_smorest import Api
@@ -15,14 +16,18 @@ from telemetry.telemetry import telemetry
 import logging
 logger = logging.getLogger(__name__)
 
-def create_app(is_testing=False):
+def create_app():
+    """
+    Start the core app, initialise db, app configs & telemetry. 
+    """
     logger.info('starting up app')
     app = Flask(__name__)
     CORS(app, methods=["GET", "POST", "PUT", "DELETE"])
     set_app_configs(app)
     set_db(app)
     register_api_routes(app)        
-    if not is_testing:
+
+    if os.getenv("DISABLE_TELEMETRY") != "1":
         setup_logging()
         telemetry.initialise(app)
     else:
