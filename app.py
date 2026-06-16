@@ -16,7 +16,10 @@ from telemetry.telemetry import telemetry
 import logging
 logger = logging.getLogger(__name__)
 
-def create_app(is_testing=False):
+def create_app():
+    """
+    Start the core app, initialise db, app configs & telemetry. 
+    """
     logger.info('starting up app')
     app = Flask(__name__)
     CORS(app, methods=["GET", "POST", "PUT", "DELETE"])
@@ -24,9 +27,7 @@ def create_app(is_testing=False):
     set_db(app)
     register_api_routes(app)        
 
-    skip_telemetry = is_testing or 'flask' in sys.argv[0]
-
-    if not skip_telemetry:
+    if os.getenv("DISABLE_TELEMETRY") != "1":
         setup_logging()
         telemetry.initialise(app)
     else:

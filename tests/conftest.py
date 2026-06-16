@@ -4,7 +4,7 @@ from db import db
 
 @pytest.fixture
 def app():
-    app = create_app(is_testing=True)
+    app = create_app()
     app.testing = True
     with app.app_context():
         db.create_all()
