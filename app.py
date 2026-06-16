@@ -1,3 +1,4 @@
+import sys
 import os
 from flask import Flask
 from flask_smorest import Api
@@ -22,7 +23,10 @@ def create_app(is_testing=False):
     set_app_configs(app)
     set_db(app)
     register_api_routes(app)        
-    if not is_testing:
+
+    skip_telemetry = is_testing or 'flask' in sys.argv[0]
+
+    if not skip_telemetry:
         setup_logging()
         telemetry.initialise(app)
     else:
