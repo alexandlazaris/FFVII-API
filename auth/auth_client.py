@@ -23,12 +23,14 @@ class AuthClient:
         )
         return response
 
+    def signup(self, email: str, password: str):
+        logger.info("signing up new user with password")
+        return self.auth_client.auth.sign_up({"email": email, "password": password})
+
     def login(self, username: str, password: str):
-        self.auth_client.auth.sign_in_with_password(
+        logger.info("logging in with password")
+        return self.auth_client.auth.sign_in_with_password(
             {"email": username, "password": password}
         )
-
-    def signup(self, email: str, password: str):
-        return self.auth_client.auth.sign_up({"email": email, "password": password})
 
 auth = AuthClient()
