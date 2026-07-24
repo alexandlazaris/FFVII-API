@@ -29,7 +29,6 @@ class InvalidCredentialsError(Exception):
 def signup_with_email_password(email: str, password: str) -> SignUpResponse:
     try:
         response = auth.signup(email, password)
-        print (response, flush=True)
         if response.session is None:
             raise RuntimeError("Expected session from email signup, returned Exception")
         return SignUpResponse(
@@ -71,6 +70,8 @@ def login_with_password(email: str, password: str) -> LoginResponse:
             case _:
                 raise
 
+def logout():
+    print("TODO")
 
-# make a logout function
-# make a delete account function
+def delete_account():
+    print("TODO")
