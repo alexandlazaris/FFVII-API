@@ -11,6 +11,8 @@ from auth.auth_client import auth
 
 logger = logging.getLogger(__name__)
 
+# TODO: split these errors into a separate module
+
 class EmailExistsError(Exception):
     pass
 
