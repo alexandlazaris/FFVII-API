@@ -33,3 +33,5 @@ opentelemetry-instrumentation-sqlite3
 opentelemetry-instrumentation-urllib
 supabase
 email-validator==2.3.0
+PyJWT
+cryptography
