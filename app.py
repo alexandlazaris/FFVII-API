@@ -7,6 +7,7 @@ from resources.party import blp as PartyBlueprint
 from resources.enemies import blp as EnemiesBlueprint
 from resources.materia import blp as MateriaBlueprint
 from resources.saves import blp as SavesBlueprint
+from resources.saveItems import blp as SaveItemBlueprint 
 from resources.health_check import blp as HealthCheckBlueprint
 from resources.auth.auth import blp as AuthBlueprint
 from db import db
@@ -15,7 +16,8 @@ from flask_cors import CORS
 from telemetry.logging_config import setup_logging
 from telemetry.telemetry import telemetry 
 import logging
-from auth.auth_client import auth
+from auth.client.auth_client import auth
+from auth.jwt.handlers import register_auth_handlers
 
 logger = logging.getLogger(__name__)
 
@@ -30,12 +32,16 @@ def create_app():
     set_db(app)
     register_api_routes(app)        
 
-    # auth stuff
+    # init auth client
     try:
         auth.client_setup()
     except Exception as e:
         print ("something went wrong with auth: %s", e)
 
+    # register auth handlers
+    register_auth_handlers(app)
+
+    # check telemetry flag 
     if os.getenv("DISABLE_TELEMETRY") != "1":
         setup_logging()
         telemetry.initialise(app)
@@ -75,5 +81,6 @@ def register_api_routes(app):
     api.register_blueprint(EnemiesBlueprint)
     api.register_blueprint(MateriaBlueprint)
     api.register_blueprint(SavesBlueprint)
+    api.register_blueprint(SaveItemBlueprint) 
     api.register_blueprint(HealthCheckBlueprint)
     api.register_blueprint(AuthBlueprint)
