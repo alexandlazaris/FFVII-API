@@ -1,6 +1,7 @@
 import pytest
 from app import create_app
 from db import db
+from unittest.mock import patch
 
 @pytest.fixture
 def app():
@@ -15,3 +16,13 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+@pytest.fixture(autouse=True)
+def mock_auth():
+    with patch("auth.jwt.decorators.verify_access_token") as mock:
+        mock.return_value = {
+        "sub": "test_user_123",
+        "email": "test@example.com",
+    }
+        yield mock
