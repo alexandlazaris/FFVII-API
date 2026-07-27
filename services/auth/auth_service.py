@@ -1,13 +1,10 @@
 from flask_smorest import abort
-from pydantic import ValidationError
-from supabase import AuthApiError
+from supabase_auth.errors import AuthApiError
 from db import db
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-from models.auth.auth import LoginResponse, SignupRequest, LoginRequest, SignUpResponse
-import json
+from models.auth.auth import LoginResponse, SignUpResponse
 from flask import jsonify
 import logging
-from auth.auth_client import auth
+from auth.client.auth_client import auth
 
 logger = logging.getLogger(__name__)
 

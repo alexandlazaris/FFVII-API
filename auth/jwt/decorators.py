@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import g, request
-from auth.verifier import verify_access_token
-from auth.exceptions import InvalidTokenError
+from auth.jwt.verifier import verify_access_token
+from auth.jwt.exceptions import InvalidTokenError
 
 def require_auth(func):
     @wraps(func)

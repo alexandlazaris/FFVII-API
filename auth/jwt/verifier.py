@@ -1,8 +1,8 @@
 import os
 import jwt
 from jwt import PyJWKClient
-from auth.principal import AuthenticatedUser
-from auth.exceptions import InvalidTokenError
+from auth.jwt.principal import AuthenticatedUser
+from auth.jwt.exceptions import InvalidTokenError
 from dotenv import load_dotenv
 
 load_dotenv()
