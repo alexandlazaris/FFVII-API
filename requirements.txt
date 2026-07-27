@@ -31,7 +31,10 @@ opentelemetry-instrumentation-requests
 opentelemetry-instrumentation-sqlalchemy
 opentelemetry-instrumentation-sqlite3
 opentelemetry-instrumentation-urllib
-supabase
+supabase==2.16.0 
+supabase-auth==2.31.0 
+supabase-functions==2.31.0 
+supafunc==0.10.2
 email-validator==2.3.0
 PyJWT
 cryptography
