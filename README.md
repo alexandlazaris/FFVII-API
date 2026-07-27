@@ -56,7 +56,7 @@ GET /saves
 2. target `0.0.0.0:80` for any local tests and debugging
 3. open `{url}:{port}/swagger-ui` for api docs
 
-## launch API locally
+## local development
 
 > [!TIP]  
 > Use a virtual python env to isolate your workspace. 
@@ -64,8 +64,7 @@ GET /saves
 1. `python3 -m venv .venv` (or rename `.venv` to whatever you like)
 2. `source .venv/bin/activate`
 3. `pip install -r requirements`
-2. run `sh migrations-run-local.sh` to prep your db 
-3. start server using `gunicorn --bind 0.0.0.0:7777 "app:create_app()"`
+2. run `sh docker-local-container.sh` to start container and your favourite API client
 4. jump to `localhost:7777/swagger-ui` for api docs
 
 ## tests
