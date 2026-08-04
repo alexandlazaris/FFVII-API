@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, Field, EmailStr
 
 class EmailPasswordCredentials(BaseModel):
@@ -11,9 +12,11 @@ class LoginRequest(EmailPasswordCredentials):
     pass
 
 class SignUpResponse(BaseModel):
-    email: str
-    email_verified: bool
+    email: Optional[EmailStr] = None
 
 class LoginResponse(BaseModel):
     access_token: str
     refresh_token: str
+
+class LogoutResponse(BaseModel):
+    result: str

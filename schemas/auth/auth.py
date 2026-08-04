@@ -18,3 +18,6 @@ class LoginWithPasswordResponseSchema(Schema):
 
 class LoginWithPasswordErrorSchema(Schema):
     error = fields.Str(dump_only=True)
+
+class LogoutSchema(Schema):
+    result = fields.Str(dump_only=True)
