@@ -6,7 +6,6 @@ class SignUpRequestSchema(Schema):
 
 class SignUpResponseSchema(Schema):
     email = fields.Email(dumpOnly=True)
-    email_verified = fields.Str(dumpOnly=True)
 
 class LoginWithPasswordRequestSchema(Schema):
     email = fields.Email(required=True)
