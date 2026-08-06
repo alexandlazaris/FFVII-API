@@ -1,12 +1,16 @@
 from flask.views import MethodView
-from flask_smorest import Blueprint
+from flask_smorest import Blueprint, abort
+from auth.auth_exceptions import *
+from auth.jwt.decorators import require_auth
 from schemas.auth.auth import (
     SignUpRequestSchema,
     SignUpResponseSchema,
     LoginWithPasswordRequestSchema,
     LoginWithPasswordResponseSchema,
     LoginWithPasswordErrorSchema,
+    LogoutSchema
 )
+from models.auth.auth import SignupRequest, LoginRequest
 import logging
 from services.auth.auth_service import *
 
@@ -23,7 +27,7 @@ blp = Blueprint(
 @blp.route("signup")
 class SignupApi(MethodView):
     @blp.arguments(SignUpRequestSchema)
-    @blp.response(201, SignUpResponseSchema)
+    @blp.response(200, SignUpResponseSchema)
     def post(self, body):
         """
         Sign up a new user with email + password
@@ -52,8 +56,24 @@ class LoginApi(MethodView):
         request = LoginRequest.model_validate(body)
         try:
             session = login_with_password(request.email, request.password)
-            return session.model_dump()
+            return session
         except EmailNotConfirmedError:
             abort(401, message="Email not confirmed")
         except InvalidCredentialsError:
             abort(401, message="Invalid credentials")
+
+
+# @require_auth
+@blp.route("logout")
+class LogoutApi(MethodView):
+    decorators = [require_auth]
+    @blp.response(204, LogoutSchema)
+    def post(self):
+        """
+        Logout of existing session
+        """
+        try:
+            session = sign_out()
+            return session
+        except SessionNotFound:
+            abort(401, message="User session not found")

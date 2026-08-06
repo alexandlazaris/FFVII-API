@@ -1,74 +1,34 @@
-from flask_smorest import abort
-from supabase_auth.errors import AuthApiError
-from db import db
-from models.auth.auth import LoginResponse, SignUpResponse
-from flask import jsonify
+from models.auth.auth import LoginResponse, LogoutResponse, SignUpResponse
 import logging
-from auth.client.auth_client import auth
+from auth.client.auth_client import AuthClient
+
+_auth_client = AuthClient()
 
 logger = logging.getLogger(__name__)
 
-# TODO: split these errors into a separate module
-
-class EmailExistsError(Exception):
-    pass
-
-class EmailRateLimitExceededError(Exception):
-    pass
-
-class EmailNotConfirmedError(Exception):
-    pass
-
-class InvalidCredentialsError(Exception):
-    pass
-
-
 def signup_with_email_password(email: str, password: str) -> SignUpResponse:
-    try:
-        response = auth.signup(email, password)
-        if response.session is None:
-            raise RuntimeError("Expected session from email signup, returned Exception")
-        return SignUpResponse(
-            email=response.session.user.user_metadata["email"],
-            email_verified=response.session.user.user_metadata["email_verified"],
-        )
-    except AuthApiError as e:
-        match e.code:
-            case "email_exists":
-                raise EmailExistsError()
-            case "over_email_send_rate_limit":
-                raise EmailRateLimitExceededError()
-            case _:
-                raise
+    response = _auth_client.signup(email, password)
+    if response.user is None:
+        raise RuntimeError("Expected session from email signup, returned Exception")
+    return SignUpResponse(
+        email=response.user.email
+    )
 
-def get_error_metadata(e:AuthApiError):
-    print (e, flush=True)
-    print (e.message, flush=True)
-    print (e.code, flush=True)
-    print (e.status, flush=True)
 
 def login_with_password(email: str, password: str) -> LoginResponse:
-    try:
-        response = auth.login(email, password)
-        if response.session is None:
-            raise RuntimeError(
-                "Expected session from password login, returned Exception"
-            )
-        return LoginResponse(
-            access_token=response.session.access_token,
-            refresh_token=response.session.refresh_token,
-        )
-    except AuthApiError as e:
-        match e.code:
-            case "email_not_confirmed":
-                raise EmailNotConfirmedError()
-            case "invalid_credentials":
-                raise InvalidCredentialsError()
-            case _:
-                raise
+    response = _auth_client.login(email, password)
+    if response.session is None:
+        raise RuntimeError("Expected session from password login, returned Exception")
+    return LoginResponse(
+        access_token=response.session.access_token,
+        refresh_token=response.session.refresh_token,
+    )
 
-def logout():
-    print("TODO")
+
+def sign_out() -> LogoutResponse:
+    _auth_client.sign_out()
+    return LogoutResponse(result="log out complete")
+
 
 def delete_account():
     print("TODO")
