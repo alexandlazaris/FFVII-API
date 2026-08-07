@@ -20,3 +20,6 @@ class LoginWithPasswordErrorSchema(Schema):
 
 class LogoutSchema(Schema):
     result = fields.Str(dump_only=True)
+
+class SignupConfirmEmailToken(Schema):
+    token_hash = fields.Str(required=True)

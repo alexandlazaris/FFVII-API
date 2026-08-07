@@ -1,6 +1,7 @@
 import os
 import logging
 from typing import Optional
+from gotrue import VerifyOtpParams, VerifyTokenHashParams
 from supabase import SupabaseException, create_client, Client
 from gotrue.errors import AuthApiError
 from auth.auth_exceptions import *
@@ -73,7 +74,7 @@ class AuthClient:
                 case _:
                     raise
 
-    def get_user(self, access_token:str) -> User:
+    def get_user(self, access_token: str) -> User:
         client = self._client()
         try:
             response = client.auth.get_user(access_token)
@@ -86,5 +87,30 @@ class AuthClient:
             match e.code:
                 case "user_not_found":
                     raise UserNotFound()
+                case _:
+                    raise
+
+    def confirm_user_signup(self, token_hash: str) -> AuthResponse:
+        client = self._client()
+        params: VerifyTokenHashParams = {
+            "token_hash": token_hash,
+            "type": "signup",
+            
+        }
+        try:
+            response = client.auth.verify_otp(params)
+            return response
+        except AuthApiError as e:
+            print (e.to_dict())
+            print (e, flush=True)
+            print (e.code, flush=True)
+            print (e.message, flush=True)
+            print (e.name, flush=True)
+            print (e.status, flush=True)
+            match e.code:
+                case "otp_expired":
+                    raise SignUpInviteExpiredError()
+                case "signup_disabled":
+                    raise SignUpInviteDisabledError()
                 case _:
                     raise

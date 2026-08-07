@@ -15,3 +15,9 @@ class SessionNotFound(Exception):
 
 class AuthConfigurationError(Exception):
     pass
+
+class SignUpInviteExpiredError(Exception):
+    pass
+
+class SignUpInviteDisabledError(Exception):
+    pass

@@ -8,9 +8,14 @@ from schemas.auth.auth import (
     LoginWithPasswordRequestSchema,
     LoginWithPasswordResponseSchema,
     LoginWithPasswordErrorSchema,
-    LogoutSchema
+    LogoutSchema,
+    SignupConfirmEmailToken
 )
-from models.auth.auth import SignupRequest, LoginRequest
+from models.auth.auth import (
+    SignupRequest,
+    LoginRequest,
+    SignUpConfirmRequest,
+)
 import logging
 from services.auth.auth_service import *
 
@@ -63,10 +68,29 @@ class LoginApi(MethodView):
             abort(401, message="Invalid credentials")
 
 
+# TODO: add token_hash as a query param, remove from payload, e.g. ?token_hash=123
+@blp.route("confirm")
+class ConfirmApi(MethodView):
+    @blp.arguments(SignupConfirmEmailToken)
+    def post(self, body):
+        """
+        Confirm signup invite for new user
+        """
+        request = SignUpConfirmRequest.model_validate(body)
+        try:
+            response = confirm_user_sign(token_hash=request.token_hash)
+            return response
+        except SignUpInviteExpiredError:
+            abort(401, message="Confirmation link has expired. Signup again.")
+        except SignUpInviteDisabledError:
+            abort(404, message="Signup through email has been disabled for this app.")
+
+
 # @require_auth
 @blp.route("logout")
 class LogoutApi(MethodView):
     decorators = [require_auth]
+
     @blp.response(204, LogoutSchema)
     def post(self):
         """
