@@ -1,10 +1,14 @@
 from models import Save
 from app import db
+import uuid
 
 def test_get_all_saves(client, app):
     with app.app_context():
-        save_1 = Save(location="midgar")
-        save_2 = Save(location="gongaga")
+        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_2 = {"user_id": uuid.uuid4(), "location": "Temple of the Ancients", "disc": 2}
+        
+        save_1 = Save(**data_1)
+        save_2 = Save(**data_2)
         db.session.add(save_1)
         db.session.add(save_2)
         db.session.commit()
@@ -15,8 +19,11 @@ def test_get_all_saves(client, app):
 
 def test_delete_all_saves(client, app):
     with app.app_context():
-        save_1 = Save(location="midgar")
-        save_2 = Save(location="midgar")
+        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_2 = {"user_id": uuid.uuid4(), "location": "Temple of the Ancients", "disc": 2}
+        
+        save_1 = Save(**data_1)
+        save_2 = Save(**data_2)
         db.session.add(save_1)
         db.session.add(save_2)
         db.session.commit()
