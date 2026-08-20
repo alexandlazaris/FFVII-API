@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
-
 from schemas.materia import MateriaSchema
+from pydantic import BaseModel
 
 class PartyMemberSchema(Schema):
     id = fields.Str(dump_only=True)
@@ -22,3 +22,13 @@ class PartyMemberRequestSchema(Schema):
 class PartyMemberResponseSchema(Schema):
     name = fields.Str()
     level = fields.Str()
+
+class PartyRequest(BaseModel):
+    name: str
+
+class PartyResponse(BaseModel):
+    name: str
+    level: int
+
+CreatePartyRequest = list[PartyRequest]
+CreatePartyResponse = list[PartyResponse]

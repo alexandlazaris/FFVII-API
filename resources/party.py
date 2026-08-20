@@ -1,3 +1,4 @@
+from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import db
@@ -8,7 +9,7 @@ from schemas import (
     GetMemberMateriaSchema,
     GetSingleMemberMateriaSchema,
     PartyMemberRequestSchema,
-    PartyMemberResponseSchema
+    PartyMemberResponseSchema,
 )
 from services.party_service import (
     create_party,
@@ -16,6 +17,7 @@ from services.party_service import (
     update_party_using_save,
 )
 import json
+from utils.responses import api_response
 
 blp = Blueprint(
     "Party",
@@ -24,17 +26,17 @@ blp = Blueprint(
     description="Endpoints for managing the party",
 )
 
-
+# TODO: add auth decorator
 @blp.route("<string:id>")
 class PartyApi(MethodView):
-    @blp.arguments(PartyMemberRequestSchema(many=True))
-    @blp.response(201, PartyMemberResponseSchema(many=True))
-    def post(self, body, id):
+    def post(self, id):
         """
         Create a party for a save file, adding 1-3 members
         """
-        return create_party(body, id)
-
+        body = request.get_json()
+        result = create_party(body, id)
+        return api_response(result)
+        
     @blp.response(200, PartyMemberResponseSchema(many=True))
     def get(self, id):
         """
