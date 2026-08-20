@@ -14,7 +14,7 @@ blp = Blueprint(
 )
 
 
-@blp.route("data")
+@blp.route("")
 class Characters(MethodView):
     @blp.response(201, CharactersSchema(many=True))
     def post(self):
@@ -37,10 +37,6 @@ class Characters(MethodView):
                 abort(500, message="Error occurred whilst inserting record.")
         return CharactersModel.query.all()
         
-
- 
-@blp.route("")
-class Characters(MethodView):
     @blp.response(200, CharactersSchema(many=True))
     def get(self):
         """

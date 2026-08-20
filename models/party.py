@@ -1,13 +1,10 @@
 from db import db
 from sqlalchemy import UniqueConstraint
 
-
 class Party(db.Model):
     __tablename__ = "party"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-    level = db.Column(db.Integer, nullable=False, default=1)
+    id = db.Column(db.Integer, primary_key=True) 
     save_id = db.Column(
         db.String,
         db.ForeignKey(
@@ -16,6 +13,7 @@ class Party(db.Model):
             name="fk_party_save_id",
         ),
         nullable=False,
+        unique=True,
     )
 
     __table_args__ = (

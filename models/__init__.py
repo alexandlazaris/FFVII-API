@@ -6,3 +6,4 @@ from models.party_materia import PartyMateriaModel
 from models.saves import Save
 from models.auth.auth import LoginRequest, SignupRequest, SignUpResponse, LoginResponse, LogoutResponse
 from models.user.user import GetUserResponse
+from models.party_member import PartyMember
