@@ -1,5 +1,5 @@
 def test_initialise_characters(client):
-    response = client.post('/characters/data')
+    response = client.post('/characters')
     assert response.status_code == 201
     
 def test_get_characters(client):
