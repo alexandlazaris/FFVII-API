@@ -90,7 +90,6 @@ class ConfirmApi(MethodView):
 @blp.route("logout")
 class LogoutApi(MethodView):
     decorators = [require_auth]
-
     @blp.response(204, LogoutSchema)
     def post(self):
         """

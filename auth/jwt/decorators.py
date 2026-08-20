@@ -14,11 +14,13 @@ def require_auth(func):
         if not auth_header.startswith("Bearer "):
             raise InvalidTokenError("Invalid authorization header")
 
-        # user = verify_access_token(token)
-        # g.user = user
         token = auth_header.removeprefix("Bearer ").strip()
-
+        
+        if not token:
+            raise InvalidTokenError("Missing bearer token")
+        
         g.access_token = token
+ 
         g.user = verify_access_token(token)
         
         return func(*args, **kwargs)

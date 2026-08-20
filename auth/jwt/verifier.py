@@ -39,4 +39,4 @@ def verify_access_token(token: str) -> AuthenticatedUser:
         )
 
     except Exception as e:
-        raise InvalidTokenError() from e
+        raise InvalidTokenError("Invalid or expired access token") from e

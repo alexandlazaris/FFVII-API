@@ -80,7 +80,6 @@ class AuthClient:
             response = client.auth.get_user(access_token)
             if response is None or response.user is None:
                 # TODO: not totally convinced if error should be caught here or in respective service
-                # TODO: check if this prints anything useful
                 raise UserNotFound()
             return response.user
         except AuthApiError as e:
@@ -101,12 +100,6 @@ class AuthClient:
             response = client.auth.verify_otp(params)
             return response
         except AuthApiError as e:
-            print (e.to_dict())
-            print (e, flush=True)
-            print (e.code, flush=True)
-            print (e.message, flush=True)
-            print (e.name, flush=True)
-            print (e.status, flush=True)
             match e.code:
                 case "otp_expired":
                     raise SignUpInviteExpiredError()
