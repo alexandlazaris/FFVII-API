@@ -3,11 +3,12 @@ from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.saves import Save
 from models.party import Party
+from schemas.saves import SaveItemCreateRequest, SaveItemCreateResponse
 import json
 from flask import jsonify
 import logging
+from flask import g
 
-# module level logger
 logger = logging.getLogger(__name__)
 
 
@@ -46,17 +47,22 @@ def get_all_saves():
 
 
 # TODO: convert json using pydantic
-def create_save(body):
-    dumps_json = json.dumps(body)
-    loaded_json = json.loads(dumps_json)
-    new_save = Save(**loaded_json)
+def create_save(new_save_request: SaveItemCreateRequest) -> SaveItemCreateResponse:
     try:
+        # user_id = g.user.user_id
+        # print (user_id, flush=True)
+        new_save = Save(
+            user_id=user_id,
+            location=new_save_request.location,
+            disc=new_save_request.disc,
+        ) 
         db.session.add(new_save)
         db.session.commit()
         logger.info("new save created")
-        return {"id": new_save.id, "location": new_save.location}
+        return SaveItemCreateResponse.model_validate(new_save)
     except IntegrityError as e:
-        abort(400, message=f"Invalid request: {body}")
+        db.session.rollback()
+        abort(400, message=f"Invalid request: {new_save_request}")
     except SQLAlchemyError as e:
         db.session.rollback()
         abort(500, message="Error occurred whilst creating save.")

@@ -23,7 +23,6 @@ class SaveApi(MethodView):
         """ 
         Get all save files including party info
         """
-        print(f"user_id: {g}", flush=True)
         return get_all_saves()
 
     @require_auth

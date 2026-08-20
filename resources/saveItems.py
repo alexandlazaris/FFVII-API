@@ -3,7 +3,6 @@ from flask_smorest import Blueprint
 from auth.jwt.decorators import require_auth
 from schemas import SaveRequestSchema, SaveResponseSchema
 from services.saves_service import get_save_by_id, delete_save_by_id, create_save
-from flask import g
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,8 +17,8 @@ blp = Blueprint(
 @blp.route("")
 class SaveCreateApi(MethodView):
     @require_auth
-    @blp.arguments(SaveRequestSchema)
-    @blp.response(201, SaveResponseSchema)
+    # @blp.arguments(SaveRequestSchema)
+    # @blp.response(201, SaveResponseSchema)
     def post(self, body):
         """
         Create a save file

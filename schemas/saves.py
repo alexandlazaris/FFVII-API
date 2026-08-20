@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from marshmallow import Schema, fields
 
 class SaveRequestSchema(Schema):
@@ -8,3 +9,12 @@ class SaveResponseSchema(Schema):
     location = fields.Str(required=True)
     party = fields.List(fields.Str(dump_only=True))
     party_lead = fields.Dict(dump_only=True)
+
+class SaveItemCreateRequest(BaseModel):
+    location: str
+    disc: int = 1
+
+class SaveItemCreateResponse(BaseModel):
+    location: str 
+    id: str
+    disc: int
