@@ -1,9 +1,11 @@
+from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint
 from auth.jwt.decorators import require_auth
-from schemas import SaveRequestSchema, SaveResponseSchema
 from services.saves_service import get_save_by_id, delete_save_by_id, create_save
 import logging
+
+from utils.responses import api_response
 
 logger = logging.getLogger(__name__)
 
@@ -14,29 +16,30 @@ blp = Blueprint(
     description="Managing save files by id",
 )
 
+
 @blp.route("")
 class SaveCreateApi(MethodView):
-    @require_auth
-    # @blp.arguments(SaveRequestSchema)
-    # @blp.response(201, SaveResponseSchema)
-    def post(self, body):
+    decorators = [require_auth]
+    def post(self):
         """
         Create a save file
         """
-        return create_save(body)
+        body = request.get_json()
+        save = create_save(body)
+        return api_response(save)
 
 
 @blp.route("<string:id>")
 class SaveApi(MethodView):
-    @require_auth
-    @blp.response(200, SaveResponseSchema)
+    decorators = [require_auth]
     def get(self, id):
         """
         Get a save file by id
         """
-        return get_save_by_id(id)
-    
-    @require_auth
+        save = get_save_by_id(id)
+        return api_response(save)
+
+# TODO: schema + model + logic check needed
     @blp.response(200)
     def delete(self, id):
         """

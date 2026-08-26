@@ -3,8 +3,12 @@ from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.saves import Save
 from models.party import Party
-from schemas.saves import SaveItemCreateRequest, SaveItemCreateResponse
-import json
+from schemas.saves import (
+    GetSaveItemResponse,
+    SaveItemCreateRequest,
+    SaveItemCreateResponse,
+)
+from uuid import UUID
 from flask import jsonify
 import logging
 from flask import g
@@ -46,25 +50,34 @@ def get_all_saves():
         abort(500, message="Error fetching all saves.")
 
 
-# TODO: convert json using pydantic
 def create_save(new_save_request: SaveItemCreateRequest) -> SaveItemCreateResponse:
+    body = SaveItemCreateRequest.model_validate(new_save_request)
+    print(f"body validated: {body}", flush=True)
+    print(f"body location: {body.location}", flush=True)
     try:
-        # user_id = g.user.user_id
-        # print (user_id, flush=True)
-        new_save = Save(
-            user_id=user_id,
-            location=new_save_request.location,
-            disc=new_save_request.disc,
-        ) 
+        user_id = g.user.user_id
+        converted_user_id = UUID(user_id)
+        save_params = {
+            "user_id": converted_user_id,
+            "location": body.location,
+            "disc": body.disc,
+        }
+        new_save = Save(**save_params)
         db.session.add(new_save)
         db.session.commit()
-        logger.info("new save created")
-        return SaveItemCreateResponse.model_validate(new_save)
+        return SaveItemCreateResponse(
+            id=new_save.id,
+            user_id=new_save.user_id,
+            location=new_save.location,
+            disc=new_save.disc,
+        )
     except IntegrityError as e:
         db.session.rollback()
         abort(400, message=f"Invalid request: {new_save_request}")
     except SQLAlchemyError as e:
         db.session.rollback()
+        logger.error(e.__cause__)
+        logger.error("exception: %s", e, exc_info=True)
         abort(500, message="Error occurred whilst creating save.")
 
 
@@ -85,11 +98,11 @@ def delete_all_saves():
         abort(500, message="Error deleting saves.")
 
 
-def get_save_by_id(id):
-    save_file = db.session.get(Save, id)
-    if save_file is None:
-        logger.warning(f"save {id} not found")
-        abort(404)
+def get_save_by_id(id) -> GetSaveItemResponse:
+    save = db.session.get(Save, id)
+    if save is None:
+        logger.error(f"Not found")
+        abort(404, message="Not found")
     party = Party.query.filter_by(save_id=id).all()
     party_members = []
     party_lead = {}
@@ -97,14 +110,19 @@ def get_save_by_id(id):
         for m in party:
             party_members.append(m.name)
         party_lead = form_party_lead_obj(party)
-    save_info = {
-        "id": save_file.id,
-        "location": save_file.location,
+    save_found = {
+        "id": save.id,
+        "location": save.location,
         "party": party_members,
         "party_lead": party_lead,
     }
-    logger.info(f"save has been fetched")
-    return save_info
+    logger.info(f"save has been fetched: {save_found}")
+    return GetSaveItemResponse(
+        id=save.id,
+        user_id=save.user_id,
+        location=save.location,
+        disc=save.disc
+    )
 
 
 def delete_save_by_id(id):
