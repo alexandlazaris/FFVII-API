@@ -7,6 +7,7 @@ from schemas.saves import (
     GetSaveItemResponse,
     SaveItemCreateRequest,
     SaveItemCreateResponse,
+    DeleteSaveResponse,
 )
 from uuid import UUID
 from flask import jsonify
@@ -81,23 +82,6 @@ def create_save(new_save_request: SaveItemCreateRequest) -> SaveItemCreateRespon
         abort(500, message="Error occurred whilst creating save.")
 
 
-def delete_all_saves():
-    logger.warning("deleting all saves")
-    try:
-        count = Save.query.count()
-        all_saves = Save.query.all()
-        for s in all_saves:
-            Party.query.filter_by(save_id=s.id).delete()
-            db.session.commit()
-        Save.query.delete()
-        db.session.commit()
-        logger.warning(f"deleted {count} save(s)")
-        return {"message": f"deleted {count} save(s)"}
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        abort(500, message="Error deleting saves.")
-
-
 def get_save_by_id(id) -> GetSaveItemResponse:
     save = db.session.get(Save, id)
     if save is None:
@@ -118,22 +102,33 @@ def get_save_by_id(id) -> GetSaveItemResponse:
     }
     logger.info(f"save has been fetched: {save_found}")
     return GetSaveItemResponse(
-        id=save.id,
-        user_id=save.user_id,
-        location=save.location,
-        disc=save.disc
+        id=save.id, user_id=save.user_id, location=save.location, disc=save.disc
     )
 
 
-def delete_save_by_id(id):
+def delete_save_by_id(id) -> DeleteSaveResponse:
     try:
         save_file = db.session.get(Save, id)
         if save_file is None:
             abort(404)
         db.session.delete(save_file)
         db.session.commit()
-        logger.warning(f"save {id} has been deleted")
-        return {"message": f"deleted {id}"}
+        return DeleteSaveResponse(message=f"deleted {id}")
     except SQLAlchemyError as e:
         db.session.rollback()
-        abort(500, message="Error occured whislt deleting save.")
+        abort(500, message="Error deleting saves.")
+
+
+def delete_all_saves() -> DeleteSaveResponse:
+    try:
+        count = Save.query.count()
+        # all_saves = Save.query.all()
+        # for s in all_saves:
+        #     Party.query.filter_by(save_id=s.id).delete()
+        #     db.session.commit()
+        Save.query.delete()
+        db.session.commit()
+        return DeleteSaveResponse(message=f"deleted {count} save(s)")
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        abort(500, message="Error deleting saves.")

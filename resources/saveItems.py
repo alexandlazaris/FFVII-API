@@ -39,10 +39,10 @@ class SaveApi(MethodView):
         save = get_save_by_id(id)
         return api_response(save)
 
-# TODO: schema + model + logic check needed
-    @blp.response(200)
+    decorators = [require_auth]
     def delete(self, id):
         """
         Delete a save file by id
         """
-        return delete_save_by_id(id)
+        body = delete_save_by_id(id)
+        return api_response(body)

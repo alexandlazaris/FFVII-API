@@ -34,3 +34,6 @@ class GetSaveItemResponse(BaseModel):
     user_id: UUID
     party_lead: Optional[str] = None
     party: Optional[list[str]] = None
+
+class DeleteSaveResponse(BaseModel):
+    message: str

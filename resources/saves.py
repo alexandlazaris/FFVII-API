@@ -6,6 +6,8 @@ from services.saves_service import get_all_saves, delete_all_saves
 from flask import g
 import logging
 
+from utils.responses import api_response
+
 logger = logging.getLogger(__name__)
 
 blp = Blueprint(
@@ -15,6 +17,7 @@ blp = Blueprint(
     description="Managing a collection of save files",
 )
 
+# TODO: schema + model + logic + auth check needed
 @blp.route("")
 class SaveApi(MethodView):
     @require_auth
@@ -25,10 +28,11 @@ class SaveApi(MethodView):
         """
         return get_all_saves()
 
-    @require_auth
-    @blp.response(200)
+# TODO: schema + model + logic + auth check needed
+    decorators = [require_auth]
     def delete(self):
         """
         Delete all save files
         """
-        return delete_all_saves()
+        body = delete_all_saves()
+        return api_response(body)
