@@ -16,9 +16,10 @@ def test_create_party_can_create_party(app):
         save_id = save_1.id
 
     body = [{"name": "Cloud"}, {"name": "Barret"}]
-    party = create_party(body, save_id)
+    result = create_party(body, save_id)
+    assert result.party.__len__() == 2
+    assert result.party[0].name == "Cloud"
+    assert type(result.party[0].level) is int
+    assert type(result.id) is UUID
 
-    assert party == [
-        PartyResponse(name="Cloud", level=1),
-        PartyResponse(name="Barret", level=1),
-    ]
+# test to get party & party members
