@@ -15,3 +15,12 @@ class PartyMember(db.Model):
         ),
         nullable=False,
     )
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "party_id",
+            "name",
+            name="uq_party_member_party_name",
+        ),
+    )
+

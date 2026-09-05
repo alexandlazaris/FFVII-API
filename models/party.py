@@ -1,10 +1,10 @@
 from db import db
-from sqlalchemy import UniqueConstraint
+import uuid
 
 class Party(db.Model):
     __tablename__ = "party"
 
-    id = db.Column(db.Integer, primary_key=True) 
+    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
     save_id = db.Column(
         db.String,
         db.ForeignKey(
@@ -14,11 +14,4 @@ class Party(db.Model):
         ),
         nullable=False,
         unique=True,
-    )
-
-    __table_args__ = (
-        db.UniqueConstraint(
-            "save_id",
-            name="uq_party_save_id",
-        ),
     )
