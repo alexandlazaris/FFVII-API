@@ -3,58 +3,66 @@ from db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models.saves import Save
 from models.party import Party
+from models.party_member import PartyMember
 from schemas.saves import (
     GetSaveItemResponse,
     SaveItemCreateRequest,
     SaveItemCreateResponse,
     DeleteSaveResponse,
+    GetAllSaves,
+    PartyLead,
+    PartyResult,
 )
 from uuid import UUID
-from flask import jsonify
 import logging
 from flask import g
 
 logger = logging.getLogger(__name__)
 
 
-def form_party_lead_obj(party):
-    party_lead_name = party[0].name
-    party_lead_level = party[0].level
+def form_party_lead_obj(lead: PartyLead):
+    party_lead_name = lead.name
+    party_lead_level = lead.level
     party_lead = {"name": party_lead_name, "level": party_lead_level}
     return party_lead
 
 
-def get_all_saves():
-    try:
-        logger.info("fetching all saves")
-        all_saves = Save.query.all()
-        response = []
-        for each_save in all_saves:
-            location = each_save.location
-            party_members = []
-            party_lead = {}
-            party = Party.query.filter_by(save_id=each_save.id).all()
-            if len(party) > 0:
-                for m in party:
-                    party_members.append(m.name)
-                party_lead = form_party_lead_obj(party)
-            save_info = {
-                "id": each_save.id,
-                "location": location,
-                "party": party_members,
-                "party_lead": party_lead,
-            }
-            response.append(save_info)
-        return jsonify(response)
-    except SQLAlchemyError as e:
-        logger.error(str(e.__cause__))
-        abort(500, message="Error fetching all saves.")
+def map_party_data_in_save(party_id: UUID) -> PartyResult | None:
+    party_members_list = PartyMember.query.filter_by(party_id=party_id).all()
+    if len(party_members_list) > 0 and len(party_members_list) <= 3:
+        first_party_member = party_members_list[0]
+        party_lead_stats = PartyLead(
+            name=first_party_member.name, level=first_party_member.level
+        )
+        party_members = [member.name for member in party_members_list]
+        return PartyResult(id=party_id, lead=party_lead_stats, members=party_members)
+
+
+def get_all_saves() -> GetAllSaves:
+    response = []
+    all_saves = Save.query.all()
+    # read through all saves
+    for save in all_saves:
+        party_result = PartyResult()
+        save_id = save.id
+        party = Party.query.filter_by(save_id=save_id).one_or_none()
+        # TODO: potentially pass the whole party in here instead of the id only, running the check and the mapping within
+        if party is not None:
+            party_result = map_party_data_in_save(party.id)
+        save = GetSaveItemResponse(
+            id=save_id,
+            user_id=save.user_id,
+            location=save.location,
+            disc=save.disc,
+            party=party_result,
+        )
+        response.append(save)
+    return GetAllSaves(saves=response)
+    # TODO: add try/catch exceptions for all the db queries in this module
 
 
 def create_save(new_save_request: SaveItemCreateRequest) -> SaveItemCreateResponse:
     body = SaveItemCreateRequest.model_validate(new_save_request)
-    print(f"body validated: {body}", flush=True)
-    print(f"body location: {body.location}", flush=True)
     try:
         user_id = g.user.user_id
         converted_user_id = UUID(user_id)
@@ -77,8 +85,6 @@ def create_save(new_save_request: SaveItemCreateRequest) -> SaveItemCreateRespon
         abort(400, message=f"Invalid request: {new_save_request}")
     except SQLAlchemyError as e:
         db.session.rollback()
-        logger.error(e.__cause__)
-        logger.error("exception: %s", e, exc_info=True)
         abort(500, message="Error occurred whilst creating save.")
 
 
@@ -87,22 +93,16 @@ def get_save_by_id(id) -> GetSaveItemResponse:
     if save is None:
         logger.error(f"Not found")
         abort(404, message="Not found")
-    party = Party.query.filter_by(save_id=id).all()
-    party_members = []
-    party_lead = {}
-    if len(party) > 0:
-        for m in party:
-            party_members.append(m.name)
-        party_lead = form_party_lead_obj(party)
-    save_found = {
-        "id": save.id,
-        "location": save.location,
-        "party": party_members,
-        "party_lead": party_lead,
-    }
-    logger.info(f"save has been fetched: {save_found}")
+    party_result = PartyResult()
+    party = Party.query.filter_by(save_id=id).one_or_none()
+    if party is not None:
+        party_result = map_party_data_in_save(party.id)
     return GetSaveItemResponse(
-        id=save.id, user_id=save.user_id, location=save.location, disc=save.disc
+        id=id,
+        user_id=save.user_id,
+        location=save.location,
+        disc=save.disc,
+        party=party_result,
     )
 
 
@@ -122,10 +122,6 @@ def delete_save_by_id(id) -> DeleteSaveResponse:
 def delete_all_saves() -> DeleteSaveResponse:
     try:
         count = Save.query.count()
-        # all_saves = Save.query.all()
-        # for s in all_saves:
-        #     Party.query.filter_by(save_id=s.id).delete()
-        #     db.session.commit()
         Save.query.delete()
         db.session.commit()
         return DeleteSaveResponse(message=f"deleted {count} save(s)")
