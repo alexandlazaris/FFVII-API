@@ -3,13 +3,12 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError
+from auth.jwt.decorators import require_auth
 from models import Party, PartyMateriaModel, MateriaModel
 from schemas import (
     AssignMateriaSchema,
     GetMemberMateriaSchema,
-    GetSingleMemberMateriaSchema,
-    PartyMemberRequestSchema,
-    PartyMemberResponseSchema,
+    GetSingleMemberMateriaSchema
 )
 from services.party_service import (
     create_party,
@@ -26,9 +25,9 @@ blp = Blueprint(
     description="Endpoints for managing the party",
 )
 
-# TODO: add auth decorator
 @blp.route("<string:id>")
 class PartyApi(MethodView):
+    decorators = [require_auth]
     def post(self, id):
         """
         Create a party for a save file, adding 1-3 members
@@ -37,20 +36,22 @@ class PartyApi(MethodView):
         result = create_party(body, id)
         return api_response(result)
         
-    @blp.response(200, PartyMemberResponseSchema(many=True))
+    decorators = [require_auth]
     def get(self, id):
         """
         Get party for a save
         """
-        return get_party_using_save(id)
+        result = get_party_using_save(id)
+        return api_response(result)
 
-    @blp.arguments(PartyMemberRequestSchema(many=True))
-    @blp.response(200, PartyMemberResponseSchema(many=True))
-    def put(self, body, id):
+    decorators = [require_auth]
+    def put(self, id):
         """
         Update a party for a save
         """
-        return update_party_using_save(body, id)
+        body = request.get_json()
+        result = update_party_using_save(body, id) 
+        return api_response(result) 
 
 
 @blp.route("<int:member_id>/materia")

@@ -1,9 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
 from auth.jwt.decorators import require_auth
-from schemas import SaveResponseSchema
 from services.saves_service import get_all_saves, delete_all_saves
-from flask import g
 import logging
 
 from utils.responses import api_response
@@ -20,13 +18,13 @@ blp = Blueprint(
 # TODO: schema + model + logic + auth check needed
 @blp.route("")
 class SaveApi(MethodView):
-    @require_auth
-    @blp.response(200, SaveResponseSchema(many=True))
+    decorators = [require_auth]
     def get(self):
         """ 
         Get all save files including party info
         """
-        return get_all_saves()
+        body = get_all_saves()
+        return api_response(body)
 
 # TODO: schema + model + logic + auth check needed
     decorators = [require_auth]
