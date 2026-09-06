@@ -31,7 +31,7 @@ def test_can_get_existing_party(client, app):
         db.session.commit()
 
     response = client.get(
-        f"/party/{save_id}", headers={"Authorization": "Bearer test-token"}
+        f"/saves/{save_id}/party", headers={"Authorization": "Bearer test-token"}
     )
 
     json = response.get_json()
@@ -52,7 +52,7 @@ def test_can_create_party_of_3(client, app):
 
     body = [{"name": "Cloud"}, {"name": "Barret"}]
     response = client.post(
-        f"/party/{id_save}", json=body, headers={"Authorization": "Bearer test-token"}
+        f"/saves/{id_save}/party", json=body, headers={"Authorization": "Bearer test-token"}
     )
     json = response.get_json()
     assert json["party"][0]["name"] == body[0]["name"]
@@ -71,7 +71,7 @@ def test_cannot_create_party_with_duplicates(client, app):
 
     body = [{"name": "Cloud"}, {"name": "Cloud"}]
     response = client.post(
-        f"/party/{id_save}", json=body, headers={"Authorization": "Bearer test-token"}
+        f"/saves/{id_save}/party", json=body, headers={"Authorization": "Bearer test-token"}
     )
     json = response.get_json()
     assert response.status_code == 409
@@ -104,7 +104,7 @@ def test_cannot_party_if_party_already_exists(client, app):
 
     body = [{"name": "Cloud"}]
     response = client.post(
-        f"/party/{save_id}", json=body, headers={"Authorization": "Bearer test-token"}
+        f"/saves/{save_id}/party", json=body, headers={"Authorization": "Bearer test-token"}
     )
     json = response.get_json()
     assert response.status_code == 400

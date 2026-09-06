@@ -12,7 +12,7 @@ def test_get_save_by_id(client, app):
         db.session.commit()
         save_id = save_1.id 
     response = client.get(
-        f"/save/{save_id}", headers={"Authorization": "Bearer test-token"}
+        f"/saves/{save_id}", headers={"Authorization": "Bearer test-token"}
     )
     json = response.get_json()
     assert response.status_code == 200
@@ -34,7 +34,6 @@ def test_get_all_saves(client, app):
         db.session.commit()
     response = client.get("/saves", headers={"Authorization": "Bearer test-token"})
     json = response.get_json()
-    print (f"response is {json}", flush=True)
     assert response.status_code == 200
     assert len(json["saves"])  == 2
 

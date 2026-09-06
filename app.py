@@ -7,7 +7,6 @@ from resources.party import blp as PartyBlueprint
 from resources.enemies import blp as EnemiesBlueprint
 from resources.materia import blp as MateriaBlueprint
 from resources.saves import blp as SavesBlueprint
-from resources.saveItems import blp as SaveItemBlueprint 
 from resources.health_check import blp as HealthCheckBlueprint
 from resources.auth.auth import blp as AuthBlueprint
 from resources.user.user import blp as UserBlueprint
@@ -75,7 +74,6 @@ def register_api_routes(app):
     api.register_blueprint(EnemiesBlueprint)
     api.register_blueprint(MateriaBlueprint)
     api.register_blueprint(SavesBlueprint)
-    api.register_blueprint(SaveItemBlueprint) 
     api.register_blueprint(HealthCheckBlueprint)
     api.register_blueprint(AuthBlueprint)
     api.register_blueprint(UserBlueprint)

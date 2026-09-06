@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 blp = Blueprint(
     "Save item",
     __name__,
-    url_prefix="/save",
+    url_prefix="/saves",
     description="Managing save files by id",
 )
 
@@ -29,20 +29,20 @@ class SaveCreateApi(MethodView):
         return api_response(save)
 
 
-@blp.route("<string:id>")
+@blp.route("<string:save_id>")
 class SaveApi(MethodView):
     decorators = [require_auth]
-    def get(self, id):
+    def get(self, save_id):
         """
         Get a save file by id
         """
-        save = get_save_by_id(id)
+        save = get_save_by_id(save_id)
         return api_response(save)
 
     decorators = [require_auth]
-    def delete(self, id):
+    def delete(self, save_id):
         """
         Delete a save file by id
         """
-        body = delete_save_by_id(id)
+        body = delete_save_by_id(save_id)
         return api_response(body)

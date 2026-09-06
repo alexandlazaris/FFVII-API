@@ -11,7 +11,7 @@ def test_get_save_by_id(client, app):
         db.session.add(save_1)
         db.session.commit()
         id = save_1.id
-    response = client.get(f"/save/{id}", headers={"Authorization": "Bearer test-token"})
+    response = client.get(f"/saves/{id}", headers={"Authorization": "Bearer test-token"})
     json = response.get_json()
     assert response.status_code == 200
     assert json["id"] == id
@@ -27,7 +27,7 @@ def test_delete_save_by_id(client, app):
         db.session.commit()
         id = save_1.id
     response = client.delete(
-        f"/save/{id}", headers={"Authorization": "Bearer fake-token"}
+        f"/saves/{id}", headers={"Authorization": "Bearer fake-token"}
     )
     json = response.get_json()
     assert response.status_code == 200
