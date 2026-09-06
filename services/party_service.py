@@ -8,13 +8,15 @@ from schemas.party import (
     PartyMemberObj,
 )
 import logging
+from services.user.user_service import get_user_id
 
 logger = logging.getLogger(__name__)
 
 
 def create_party(body: list[dict], save_id) -> PartyResponse:
     # check if save is valid
-    save = db.session.get(Save, save_id)
+    # TODO: this check is spread across the codebase, temporary solution until complexity grows in services. Will need to become a single ownership check
+    save = Save.query.filter_by(id=save_id, user_id=get_user_id()).one_or_none()
     if save == None:
         abort(404, message=f"Save not found.")
 
@@ -47,12 +49,15 @@ def create_party(body: list[dict], save_id) -> PartyResponse:
     return PartyResponse(party=party_members, id=party_id)
 
 
-def get_party_using_save(id) -> PartyResponse:
+def get_party_using_save(save_id) -> PartyResponse:
+    save = Save.query.filter_by(id=save_id, user_id=get_user_id()).one_or_none()
+    if save == None:
+        abort(404, message=f"Save not found.")
     try:
-        party = Party.query.filter_by(save_id=id).first()
-        party_id = party.id
+        party = Party.query.filter_by(save_id=save_id).one_or_none()
         if party == None:
             abort(404, message=f"Party not found.")
+        party_id = party.id
         party_members_for_party_id = PartyMember.query.filter_by(
             party_id=party_id
         ).all()
@@ -63,14 +68,15 @@ def get_party_using_save(id) -> PartyResponse:
     except SQLAlchemyError:
         abort(500, message="Error getting save.")
 
+
 def update_party_using_save(body: list[dict], save_id: str) -> PartyResponse:
-    save = db.session.get(Save, save_id)
+    save = Save.query.filter_by(id=save_id, user_id=get_user_id()).one_or_none()
     if save == None:
         abort(404, message=f"Save not found.")
 
     party = Party.query.filter_by(save_id=save_id).one_or_none()
     if party == None:
-        abort(404, message=f"Party not found for save {save_id}")
+        abort(404, message=f"Party not found.")
     party_id = party.id
 
     # delete existing party members from party

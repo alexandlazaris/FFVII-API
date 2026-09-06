@@ -16,6 +16,7 @@ from schemas.saves import (
 from uuid import UUID
 import logging
 from flask import g
+from services.user.user_service import get_user_id
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +41,7 @@ def map_party_data_in_save(party_id: UUID) -> PartyResult | None:
 
 def get_all_saves() -> GetAllSaves:
     response = []
-    all_saves = Save.query.all()
-    # read through all saves
+    all_saves = Save.query.filter_by(user_id=get_user_id()).all()
     for save in all_saves:
         party_result = PartyResult()
         save_id = save.id
@@ -58,16 +58,13 @@ def get_all_saves() -> GetAllSaves:
         )
         response.append(save)
     return GetAllSaves(saves=response)
-    # TODO: add try/catch exceptions for all the db queries in this module
 
 
 def create_save(new_save_request: SaveItemCreateRequest) -> SaveItemCreateResponse:
     body = SaveItemCreateRequest.model_validate(new_save_request)
     try:
-        user_id = g.user.user_id
-        converted_user_id = UUID(user_id)
         save_params = {
-            "user_id": converted_user_id,
+            "user_id": get_user_id(),
             "location": body.location,
             "disc": body.disc,
         }
@@ -88,17 +85,16 @@ def create_save(new_save_request: SaveItemCreateRequest) -> SaveItemCreateRespon
         abort(500, message="Error occurred whilst creating save.")
 
 
-def get_save_by_id(id) -> GetSaveItemResponse:
-    save = db.session.get(Save, id)
+def get_save_by_id(save_id) -> GetSaveItemResponse:
+    save = Save.query.filter_by(id=save_id, user_id=get_user_id()).one_or_none()
     if save is None:
-        logger.error(f"Not found")
         abort(404, message="Not found")
     party_result = PartyResult()
-    party = Party.query.filter_by(save_id=id).one_or_none()
+    party = Party.query.filter_by(save_id=save_id).one_or_none()
     if party is not None:
         party_result = map_party_data_in_save(party.id)
     return GetSaveItemResponse(
-        id=id,
+        id=save_id,
         user_id=save.user_id,
         location=save.location,
         disc=save.disc,
@@ -106,14 +102,14 @@ def get_save_by_id(id) -> GetSaveItemResponse:
     )
 
 
-def delete_save_by_id(id) -> DeleteSaveResponse:
+def delete_save_by_id(save_id) -> DeleteSaveResponse:
     try:
-        save_file = db.session.get(Save, id)
-        if save_file is None:
-            abort(404)
-        db.session.delete(save_file)
+        save = Save.query.filter_by(id=save_id, user_id=get_user_id()).one_or_none()
+        if save is None:
+            abort(404, message="Not found")
+        db.session.delete(save)
         db.session.commit()
-        return DeleteSaveResponse(message=f"deleted {id}")
+        return DeleteSaveResponse(message=f"deleted {save_id}")
     except SQLAlchemyError as e:
         db.session.rollback()
         abort(500, message="Error deleting saves.")
@@ -121,9 +117,12 @@ def delete_save_by_id(id) -> DeleteSaveResponse:
 
 def delete_all_saves() -> DeleteSaveResponse:
     try:
-        count = Save.query.count()
-        Save.query.delete()
-        db.session.commit()
+        saves = Save.query.filter_by(user_id=get_user_id()).all()
+        count = len(saves)
+        if saves:
+            for save in saves:
+                db.session.delete(save)
+            db.session.commit()
         return DeleteSaveResponse(message=f"deleted {count} save(s)")
     except SQLAlchemyError as e:
         db.session.rollback()
