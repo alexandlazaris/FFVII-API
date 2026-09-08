@@ -1,12 +1,13 @@
 from models import Save
 from app import db
-import uuid
+from uuid import UUID
+TEST_USER_ID = UUID("00000000-0000-0000-0000-000000000001")
 
 
 def test_get_save_by_id(client, app):
     save_id: str = ""
     with app.app_context():
-        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_1 = {"user_id": TEST_USER_ID, "location": "Midgar", "disc": 1}
         save_1 = Save(**data_1)
         db.session.add(save_1)
         db.session.commit()
@@ -24,8 +25,8 @@ def test_get_save_by_id(client, app):
 
 def test_get_all_saves(client, app):
     with app.app_context():
-        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
-        data_2 = {"user_id": uuid.uuid4(), "location": "Temple of the Ancients", "disc": 2}
+        data_1 = {"user_id": TEST_USER_ID, "location": "Midgar", "disc": 1}
+        data_2 = {"user_id": TEST_USER_ID, "location": "Temple of the Ancients", "disc": 2}
 
         save_1 = Save(**data_1)
         save_2 = Save(**data_2)
@@ -40,9 +41,9 @@ def test_get_all_saves(client, app):
 
 def test_delete_all_saves(client, app):
     with app.app_context():
-        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_1 = {"user_id": TEST_USER_ID, "location": "Midgar", "disc": 1}
         data_2 = {
-            "user_id": uuid.uuid4(),
+            "user_id": TEST_USER_ID,
             "location": "Temple of the Ancients",
             "disc": 2,
         }

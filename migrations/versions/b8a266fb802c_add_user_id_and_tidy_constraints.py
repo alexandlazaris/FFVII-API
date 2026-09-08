@@ -36,9 +36,9 @@ def upgrade():
         batch_op.create_unique_constraint('uq_materia_name', ['name'])
 
     with op.batch_alter_table('party', schema=None) as batch_op:
+        batch_op.drop_constraint(batch_op.f('uix_saveid_name'), type_='unique')
         batch_op.drop_column("name")
         batch_op.drop_column("level")
-        batch_op.drop_constraint(batch_op.f('uix_saveid_name'), type_='unique')
         batch_op.create_unique_constraint('uq_party_save_id', ['save_id'])
         batch_op.create_foreign_key('fk_party_save_id', 'saves', ['save_id'], ['id'], ondelete='CASCADE')
 

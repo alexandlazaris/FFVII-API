@@ -1,14 +1,16 @@
 from models import Save, Party, PartyMember
 from schemas.party import *
 from app import db
-import uuid
+from uuid import UUID
+TEST_USER_ID = UUID("00000000-0000-0000-0000-000000000001")
+
 
 
 def test_can_get_existing_party(client, app):
     # seed Save data
     save_id = ""
     with app.app_context():
-        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_1 = {"user_id": TEST_USER_ID, "location": "Midgar", "disc": 1}
         save_1 = Save(**data_1)
         db.session.add(save_1)
         db.session.commit()
@@ -44,7 +46,7 @@ def test_can_create_party_of_3(client, app):
     # seed Save data
     id_save: str = ""
     with app.app_context():
-        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_1 = {"user_id": TEST_USER_ID, "location": "Midgar", "disc": 1}
         save_1 = Save(**data_1)
         db.session.add(save_1)
         db.session.commit()
@@ -63,7 +65,7 @@ def test_cannot_create_party_with_duplicates(client, app):
     # seed Save data
     id_save: str = ""
     with app.app_context():
-        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_1 = {"user_id": TEST_USER_ID, "location": "Midgar", "disc": 1}
         save_1 = Save(**data_1)
         db.session.add(save_1)
         db.session.commit()
@@ -80,7 +82,7 @@ def test_cannot_party_if_party_already_exists(client, app):
     # seed Save data
     save_id: str = ""
     with app.app_context():
-        data_1 = {"user_id": uuid.uuid4(), "location": "Midgar", "disc": 1}
+        data_1 = {"user_id": TEST_USER_ID, "location": "Midgar", "disc": 1}
         save_1 = Save(**data_1)
         db.session.add(save_1)
         db.session.commit()

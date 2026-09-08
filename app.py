@@ -48,7 +48,7 @@ def set_db(app):
     Create & customise db settings.
     """
     logging.info('setting db values')
-    db_url = os.getenv("DATABASE_URL", "sqlite:///data.db")
+    db_url = os.getenv("DATABASE_URL")
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
