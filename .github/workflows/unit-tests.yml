@@ -26,7 +26,9 @@ jobs:
     
     
     env:
-      DATABASE_URL: postgresql://test:test@localhost:5432/test_db
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test_db
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
 
