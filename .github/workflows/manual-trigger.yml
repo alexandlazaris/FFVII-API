@@ -32,6 +32,8 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      LOGFIRE_ENVIRONMENT: ${{secrets.LOGFIRE_ENVIRONMENT}}
+      SERVICE_NAME: ${{secrets.SERVICE_NAME}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
