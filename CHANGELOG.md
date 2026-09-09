@@ -1,6 +1,155 @@
 # CHANGELOG
 
 
+## v4.0.0 (2026-09-09)
+
+### Bug Fixes
+
+- Correct file name
+  ([`e471df2`](https://github.com/alexandlazaris/FFVII-API/commit/e471df234c8af1d35f24137b67677ea1e116bd0b))
+
+- Minor improvments
+  ([`914d783`](https://github.com/alexandlazaris/FFVII-API/commit/914d783d5faf7016938000dae7bfdea6c615b9f8))
+
+- Modified party routes to be nested to saves
+  ([`0a16f13`](https://github.com/alexandlazaris/FFVII-API/commit/0a16f13d8255d8142835df031eeb9dbf6959531b))
+
+- Resolve constraint issues in migrations & add user_id
+  ([`86e00ef`](https://github.com/alexandlazaris/FFVII-API/commit/86e00ef1135511f935f8aa0fdaf714732207b2a4))
+
+- Upgraded party to pydantic style
+  ([`bfc382c`](https://github.com/alexandlazaris/FFVII-API/commit/bfc382c40643b9a47d2be1e0bd1f7f28dde6be8e))
+
+- Upgraded saves to pydantic style
+  ([`9f810a1`](https://github.com/alexandlazaris/FFVII-API/commit/9f810a14a6b3a73085984ae11fdf89fa23591cc7))
+
+### Chores
+
+- Added TODOs
+  ([`91c6428`](https://github.com/alexandlazaris/FFVII-API/commit/91c642887c61bf60ff2e16a166ed0bc4c7d24d91))
+
+- Remove unused property
+  ([`46e79b2`](https://github.com/alexandlazaris/FFVII-API/commit/46e79b2ca8de8c9fca5a1426fb024fdac240facd))
+
+- Todo comments
+  ([`4c856c8`](https://github.com/alexandlazaris/FFVII-API/commit/4c856c89bc8ca9c91f7962b2ea8927810fa096a9))
+
+- Use latest imports
+  ([`a436398`](https://github.com/alexandlazaris/FFVII-API/commit/a436398141792130d422ebef543d0b4409a94705))
+
+### Continuous Integration
+
+- Only run on PR
+  ([`7c25fee`](https://github.com/alexandlazaris/FFVII-API/commit/7c25feec9bd0ff1e11477c5d21d2b1bcc1f46ae7))
+
+- Remove unneeded url
+  ([`138825f`](https://github.com/alexandlazaris/FFVII-API/commit/138825fc8cba98931c7a3d01e72079258df1d850))
+
+- Set env vars
+  ([`dd0a7ad`](https://github.com/alexandlazaris/FFVII-API/commit/dd0a7ad67b607eb354bf3330bdabf1b359bf0230))
+
+- Stamped supabase versions
+  ([`b56e2e1`](https://github.com/alexandlazaris/FFVII-API/commit/b56e2e16ebbc8b905c32a3648a214c7f34d5e0c5))
+
+### Documentation
+
+- Minor run changes
+  ([`b22b427`](https://github.com/alexandlazaris/FFVII-API/commit/b22b427415d2d9f3939bd21c8745349b8ddbb525))
+
+### Features
+
+- Added auth to save + party routes
+  ([`ab0187b`](https://github.com/alexandlazaris/FFVII-API/commit/ab0187b102e0e433c33529513cc457168e0e39c4))
+
+- Added new auth model for auth objects & cleaned up auth client functions
+  ([`f49467d`](https://github.com/alexandlazaris/FFVII-API/commit/f49467d16ba1263861e085f5a8625f13ea1175ae))
+
+- Added user id check for services
+  ([`3858fd0`](https://github.com/alexandlazaris/FFVII-API/commit/3858fd08ff31933a55beaf49ad9be71ee2a91b4f))
+
+- Auth client class
+  ([`aef3778`](https://github.com/alexandlazaris/FFVII-API/commit/aef3778724474f895c55c66acab92873f2176bff))
+
+- Auth service in progress, schemas added, needs tidying up
+  ([`6f83976`](https://github.com/alexandlazaris/FFVII-API/commit/6f83976c7d8d6f533dea60dcd12b88e706bbf854))
+
+- Authentiation integrated into all routes and pydantic models extended throughout
+  ([`3cb2d71`](https://github.com/alexandlazaris/FFVII-API/commit/3cb2d716f850176b3573b008786f8e31c443421e))
+
+BREAKING CHANGE: Authentication is now required for all routes, new auth sdk integrated and any
+  clients using this new version must provided jwts in every API request. Clients using v3 and lower
+  will no longer have a functioning API as the DB has changed for much of the app. Pydantic models
+  now used across Save, Party & Party Member request/responses, with flask-smorest slowly being
+  replaced. Local dev db has migrated from sqlite to postgresql.
+
+- Clean up auth service, logout function
+  ([`d6f411d`](https://github.com/alexandlazaris/FFVII-API/commit/d6f411da5a303f9d9dd999faa236c8bfa772b14f))
+
+- Delete saves routes updated
+  ([`374f2e5`](https://github.com/alexandlazaris/FFVII-API/commit/374f2e5f89205774ad298f8965151bd2c7aa5a3b))
+
+- Enable auth signup confirmation (wip)
+  ([`c0004b8`](https://github.com/alexandlazaris/FFVII-API/commit/c0004b85564536d68e3d5fee93e923cda0b29b51))
+
+- Introduce auth client + deps, and signup feature poc
+  ([`30936b5`](https://github.com/alexandlazaris/FFVII-API/commit/30936b5d0ff517d5a3cb22e6bd23b054c0acd2bd))
+
+- Introduce jwt verification & decorator
+  ([`d4608f7`](https://github.com/alexandlazaris/FFVII-API/commit/d4608f7e2523f20f697cfac6c5c9a81a44630262))
+
+- Introduced new table for party members
+  ([`0282694`](https://github.com/alexandlazaris/FFVII-API/commit/0282694db7335f881715df0acde01b024bb4432c))
+
+- Migrated local env from sqlite to postgres
+  ([`388f38d`](https://github.com/alexandlazaris/FFVII-API/commit/388f38da66282a80a7eb31609288a4932f56ee6a))
+
+- Minor schema/model/app additions for auth/user logic
+  ([`591a004`](https://github.com/alexandlazaris/FFVII-API/commit/591a004f6362b206ec3368dd57668ced8bd3eda0))
+
+- New user route + service define, revamped auth client to be created per operation
+  ([`789dd62`](https://github.com/alexandlazaris/FFVII-API/commit/789dd6277c21b4f4762cb43b7a998254579bc067))
+
+- Revised all party & save functionality with stronger typing and error handling
+  ([`47e0ddc`](https://github.com/alexandlazaris/FFVII-API/commit/47e0ddc6d404a5a34368a3676d56b2224b9fd085))
+
+- Save GET and POST both have auth + new pydantic models integrated
+  ([`473a3f7`](https://github.com/alexandlazaris/FFVII-API/commit/473a3f7958c5e9c0977debd6319960d60b9aecbe))
+
+- Saves are now protected by auth & auth routes are for basic auth are available
+  ([`2a34a62`](https://github.com/alexandlazaris/FFVII-API/commit/2a34a629144ace4372823b2faf16f16b3e468a0e))
+
+- Split up save by id into separate route
+  ([`81a147d`](https://github.com/alexandlazaris/FFVII-API/commit/81a147d542c2ae8551d82d994ce87b00c262fddb))
+
+- Tweaks to tables & migrations
+  ([`a438ce2`](https://github.com/alexandlazaris/FFVII-API/commit/a438ce211b02fdb536a139553b5813a9259731e3))
+
+### Testing
+
+- Corrected save data format
+  ([`a9fb81a`](https://github.com/alexandlazaris/FFVII-API/commit/a9fb81a24ceec84e0e610914d57218ac7d18b180))
+
+- New & updated unit tests for all revised party & save logic
+  ([`d50318d`](https://github.com/alexandlazaris/FFVII-API/commit/d50318d6e748981954b5f89803a2b985814823fa))
+
+- Refactor party tests
+  ([`5769196`](https://github.com/alexandlazaris/FFVII-API/commit/5769196eab672fd24070edfcf43cb5d71bf6e96a))
+
+- Split up dirs into app layers, cover new routes, add mocks throughout new tests
+  ([`d4c8e0f`](https://github.com/alexandlazaris/FFVII-API/commit/d4c8e0fbe643ebfe7ca19c7718ab6808fb73ddd9))
+
+- Update unit test routes + mock jwt to use in all unit test routes
+  ([`5c24408`](https://github.com/alexandlazaris/FFVII-API/commit/5c2440827686161a01ea7a5dc75a02b9e432b41f))
+
+### Breaking Changes
+
+- Authentication is now required for all routes, new auth sdk integrated and any clients using this
+  new version must provided jwts in every API request. Clients using v3 and lower will no longer
+  have a functioning API as the DB has changed for much of the app. Pydantic models now used across
+  Save, Party & Party Member request/responses, with flask-smorest slowly being replaced. Local dev
+  db has migrated from sqlite to postgresql.
+
+
 ## v3.0.1 (2026-06-16)
 
 ### Bug Fixes
