@@ -1,51 +1,74 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
-from schemas import SaveRequestSchema, SaveResponseSchema
-from services.saves_service import get_all_saves, create_save, delete_all_saves, get_save_by_id, delete_save_by_id
-
-blp = Blueprint(
-    "Save",
-    __name__,
-    url_prefix="/saves",
-    description="CRUD for save files",
+from auth.jwt.decorators import require_auth
+import logging
+from flask import request
+from services.saves_service import (
+    get_save_by_id,
+    delete_save_by_id,
+    create_save,
+    get_all_saves,
+    delete_all_saves,
 )
 
-@blp.route("")
-class SaveApi(MethodView):
-    @blp.arguments(SaveRequestSchema)
-    @blp.response(201, SaveResponseSchema)
-    def post(self, body):
-        """
-        Create a save file
-        """
-        return create_save(body)
 
-    @blp.response(200, SaveResponseSchema(many=True))
+from utils.responses import api_response
+
+logger = logging.getLogger(__name__)
+
+blp = Blueprint(
+    "Saves",
+    __name__,
+    url_prefix="/saves",
+    description="Managing a collection of save files",
+)
+
+
+@blp.route("")
+class SavesApi(MethodView):
+    decorators = [require_auth]
+
     def get(self):
-        """ 
+        """
         Get all save files including party info
         """
-        return get_all_saves()
+        body = get_all_saves()
+        return api_response(body)
 
-    @blp.response(200)
+    decorators = [require_auth]
+
     def delete(self):
         """
         Delete all save files
         """
-        return delete_all_saves()
+        body = delete_all_saves()
+        return api_response(body)
 
-@blp.route("<string:id>")
+    decorators = [require_auth]
+    def post(self):
+        """
+        Create a save file
+        """
+        body = request.get_json()
+        save = create_save(body)
+        return api_response(save)
+
+@blp.route("<string:save_id>")
 class SaveApi(MethodView):
-    @blp.response(200, SaveResponseSchema)
-    def get(self, id):
+    decorators = [require_auth]
+
+    def get(self, save_id):
         """
         Get a save file by id
         """
-        return get_save_by_id(id)
-    
-    @blp.response(200)
-    def delete(self, id):
+        save = get_save_by_id(save_id)
+        return api_response(save)
+
+    decorators = [require_auth]
+
+    def delete(self, save_id):
         """
-        Delete a save file by id
+        Delete a save file by save_id
         """
-        return delete_save_by_id(id)
+        body = delete_save_by_id(save_id)
+        return api_response(body)

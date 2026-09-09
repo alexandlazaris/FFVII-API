@@ -8,12 +8,16 @@ from resources.enemies import blp as EnemiesBlueprint
 from resources.materia import blp as MateriaBlueprint
 from resources.saves import blp as SavesBlueprint
 from resources.health_check import blp as HealthCheckBlueprint
+from resources.auth.auth import blp as AuthBlueprint
+from resources.user.user import blp as UserBlueprint
 from db import db
 from flask_migrate import Migrate
 from flask_cors import CORS
 from telemetry.logging_config import setup_logging
 from telemetry.telemetry import telemetry 
 import logging
+from auth.jwt.handlers import register_auth_handlers
+
 logger = logging.getLogger(__name__)
 
 def create_app():
@@ -27,6 +31,10 @@ def create_app():
     set_db(app)
     register_api_routes(app)        
 
+    # register auth handlers
+    register_auth_handlers(app)
+
+    # check telemetry flag 
     if os.getenv("DISABLE_TELEMETRY") != "1":
         setup_logging()
         telemetry.initialise(app)
@@ -40,7 +48,7 @@ def set_db(app):
     Create & customise db settings.
     """
     logging.info('setting db values')
-    db_url = os.getenv("DATABASE_URL", "sqlite:///data.db")
+    db_url = os.getenv("DATABASE_URL")
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
@@ -67,3 +75,5 @@ def register_api_routes(app):
     api.register_blueprint(MateriaBlueprint)
     api.register_blueprint(SavesBlueprint)
     api.register_blueprint(HealthCheckBlueprint)
+    api.register_blueprint(AuthBlueprint)
+    api.register_blueprint(UserBlueprint)

@@ -1,15 +1,36 @@
 name: Unit tests
 on:
-  push:
-    branches-ignore:
-      - main
-  pull_request:
-    branches-ignore:
-      - main
+  pull_request: 
 
 jobs:
   run_unit_tests:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test -d test_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    
+    env:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test_db
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+
+
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

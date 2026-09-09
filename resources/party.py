@@ -1,14 +1,14 @@
+from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from db import db
 from sqlalchemy.exc import SQLAlchemyError
+from auth.jwt.decorators import require_auth
 from models import Party, PartyMateriaModel, MateriaModel
 from schemas import (
     AssignMateriaSchema,
     GetMemberMateriaSchema,
     GetSingleMemberMateriaSchema,
-    PartyMemberRequestSchema,
-    PartyMemberResponseSchema
 )
 from services.party_service import (
     create_party,
@@ -16,39 +16,43 @@ from services.party_service import (
     update_party_using_save,
 )
 import json
+from utils.responses import api_response
 
 blp = Blueprint(
     "Party",
     __name__,
-    url_prefix="/party",
-    description="Endpoints for managing the party",
+    url_prefix="/saves",
+    description="Manage the party for a save file.",
 )
 
 
-@blp.route("<string:id>")
-class PartyApi(MethodView):
-    @blp.arguments(PartyMemberRequestSchema(many=True))
-    @blp.response(201, PartyMemberResponseSchema(many=True))
-    def post(self, body, id):
+@blp.route("<string:save_id>/party")
+class SavePartyApi(MethodView):
+    decorators = [require_auth]
+    def post(self, save_id):
         """
         Create a party for a save file, adding 1-3 members
         """
-        return create_party(body, id)
+        body = request.get_json()
+        result = create_party(body, save_id)
+        return api_response(result)
 
-    @blp.response(200, PartyMemberResponseSchema(many=True))
-    def get(self, id):
+    decorators = [require_auth]
+    def get(self, save_id):
         """
         Get party for a save
         """
-        return get_party_using_save(id)
+        result = get_party_using_save(save_id)
+        return api_response(result)
 
-    @blp.arguments(PartyMemberRequestSchema(many=True))
-    @blp.response(200, PartyMemberResponseSchema(many=True))
-    def put(self, body, id):
+    decorators = [require_auth]
+    def put(self, save_id):
         """
         Update a party for a save
         """
-        return update_party_using_save(body, id)
+        body = request.get_json()
+        result = update_party_using_save(body, save_id)
+        return api_response(result)
 
 
 @blp.route("<int:member_id>/materia")

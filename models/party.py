@@ -1,14 +1,17 @@
 from db import db
-from sqlalchemy import UniqueConstraint
+import uuid
 
 class Party(db.Model):
     __tablename__ = "party"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False) 
-    level = db.Column(db.Integer, nullable=False, default=1)
-    save_id = db.Column(db.String, nullable=False)
-    
-    _table_args__ = (
-        UniqueConstraint('save_id', 'name', name='uix_saveid_name'),
-    ) 
+    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    save_id = db.Column(
+        db.String,
+        db.ForeignKey(
+            "saves.id",
+            ondelete="CASCADE",
+            name="fk_party_save_id",
+        ),
+        nullable=False,
+        unique=True,
+    )

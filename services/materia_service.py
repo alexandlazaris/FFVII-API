@@ -34,7 +34,6 @@ def get_materia_with_filters(params):
 def seed_materia_data():
     query = MateriaModel.query
     if query.count() == materia_data.__len__():
-        logger("materia data has already been seeded, skipping", flush=True)
         abort(400)
     else:
         # TODO: below needs to be refactored, messy json handling
