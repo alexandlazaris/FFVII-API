@@ -34,6 +34,7 @@ jobs:
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       LOGFIRE_ENVIRONMENT: ${{secrets.LOGFIRE_ENVIRONMENT}}
       SERVICE_NAME: ${{secrets.SERVICE_NAME}}
+      LOGFIRE_TOKEN: ${{secrets.LOGFIRE_TOKEN}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -50,6 +51,6 @@ jobs:
 
       - name: Upgrade db
         run: |
-          DISABLE_TELEMETRY=0 flask db current
-          DISABLE_TELEMETRY=0 flask db heads
-          DISABLE_TELEMETRY=0 flask db upgrade
+          flask db current
+          flask db heads
+          flask db upgrade
