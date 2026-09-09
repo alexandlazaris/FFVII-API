@@ -30,6 +30,8 @@ jobs:
     environment: prod
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -46,6 +48,6 @@ jobs:
 
       - name: Upgrade db
         run: |
-          DISABLE_TELEMETRY=1 flask db current
-          DISABLE_TELEMETRY=1 flask db heads
-          DISABLE_TELEMETRY=1 flask db upgrade
+          DISABLE_TELEMETRY=0 flask db current
+          DISABLE_TELEMETRY=0 flask db heads
+          DISABLE_TELEMETRY=0 flask db upgrade
