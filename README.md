@@ -16,36 +16,41 @@ Ever wanted to play FF7 ... one of the greatest games of all time ... as a REST 
 
 ```
 GET /saves
-[
-  {
-    "id": "1400602a-516f-449c-84f6-b22c9a0d28e3",
-    "location": "mideel",
-    "party": [
-      "Cloud",
-      "Cid",
-      "Cait Sith"
-    ],
-    "party_lead": {
-      "level": 77,
-      "name": "Cloud"
+{
+  "saves": [
+    {
+      "disc": 1,
+      "id": "4d002c00-1187-4e59-92c2-22f8efd1ed1a",
+      "location": "Temple of the Ancients",
+      "party": {
+        "id": "d0b5858d-a5e3-4e99-bd94-c8f6d4575bf9",
+        "lead": {
+          "level": 1,
+          "name": "Cloud"
+        },
+        "members": [
+          "Cloud"
+        ]
+      },
+      "user_id": "b2c0d3e9-3aec-4e43-b451-8434fffa2f5d"
     }
-  }
-]
+  ]
+}
 ```
 
-- create & manage your party of up to 3 characters
+- sign up and login to user profiles
+- manage save files to hold location, disc and party info
+- manage party members in save parties
 - create & manage your save files, storing key info on your party & location
-- read tips and info on bosses
+- read boss stats & descriptions
 - ~~assign materia to party members~~ > broken, do not use, started this way too early
 - read all in-game materia, filtering by type (e.g `magic`), element (e.g `fire`) and sort (`asc/desc`)
 
 ## coming soon
 
-- full in-game enemy details
-- improved db relationships between Party members, Materia & Save States 
-- wild encounters to fight enemies and gain XP/AP/Gil
-- link party members with materia, equipment
-- display party member stats
+- full list of boss fights and associated details
+- display party stats for level, hp/mp, equipment
+- manage party member equipment (weapon, armour, accessory)
 
 > [!NOTE]  
 > If you have any ideas or feedback, please create an **Issue** or start a **Discussion**. Cheers!
