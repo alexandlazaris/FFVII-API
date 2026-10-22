@@ -1,5 +1,10 @@
 # Creating & restoring backups
 
+To take a snapshot of a connected postgres db instance, you'll need the following accessible from the host machine:
+
+- a running app service
+- a valid, working connection to the target db
+
 ## 1. Start app
 
 Run the service using `docker compose up -d`
