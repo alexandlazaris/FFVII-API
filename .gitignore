@@ -9,3 +9,4 @@ data.db
 .env
 .coverage
 htmlcov/
+backups/*.dump
